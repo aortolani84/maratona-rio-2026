@@ -292,7 +292,7 @@ input[type=range]{width:100%;accent-color:var(--orange);margin-bottom:10px}
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
         <div class="seclabel" style="margin-bottom:0">HIDRATAÇÃO HOJE</div>
-        <div id="hyd-display" style="font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:#FFD740">0,0L / 2,0L</div>
+        <div id="hyd-display" style="font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:#FFD740">0,0L / 3,0L</div>
       </div>
       <div class="hyd-bar-wrap"><div id="hyd-bar" class="hyd-bar" style="width:0%;background:#FFD740"></div></div>
       <div class="hyd-btns">
@@ -416,8 +416,8 @@ input[type=range]{width:100%;accent-color:var(--orange);margin-bottom:10px}
     <div class="card-grid-3">
       <div class="card accent" style="border-top-color:#4FC3F7;padding:12px;text-align:center">
         <div class="stat-label">Peso atual</div>
-        <div class="stat-value" id="peso-atual" style="color:#4FC3F7">73,9<span style="font-size:11px;color:#555">kg</span></div>
-        <div class="stat-sub" id="peso-data">14/04/2026</div>
+        <div class="stat-value" id="peso-atual" style="color:#4FC3F7">72,8<span style="font-size:11px;color:#555">kg</span></div>
+        <div class="stat-sub" id="peso-data">10/05/2026</div>
       </div>
       <div class="card accent" style="border-top-color:#69F0AE;padding:12px;text-align:center">
         <div class="stat-label">Variação</div>
@@ -567,7 +567,7 @@ input[type=range]{width:100%;accent-color:var(--orange);margin-bottom:10px}
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px">
           <div style="font-size:10px"><span style="color:#3a6a4a">PR Meia: </span><strong style="color:#bbb">1:42:57 (26/04)</strong></div>
           <div style="font-size:10px"><span style="color:#3a6a4a">VO₂ Máx: </span><strong style="color:#bbb">52 · Excelente</strong></div>
-          <div style="font-size:10px"><span style="color:#3a6a4a">Peso: </span><strong style="color:#bbb">73,9kg (14/04)</strong></div>
+          <div style="font-size:10px"><span style="color:#3a6a4a">Peso: </span><strong style="color:#bbb">72,8kg (10/05)</strong></div>
           <div style="font-size:10px"><span style="color:#3a6a4a">Objetivo: </span><strong style="color:#bbb">3:38–3:45</strong></div>
           <div style="font-size:10px"><span style="color:#3a6a4a">Volume pico: </span><strong style="color:#bbb">268km (abr)</strong></div>
           <div style="font-size:10px"><span style="color:#3a6a4a">Próxima: </span><strong style="color:#bbb">21K Asics 17/05</strong></div>
@@ -654,6 +654,7 @@ const DEFAULT = {
   weights:[
     {date:"2026-01-20",kg:78.5},
     {date:"2026-04-14",kg:73.9},
+    {date:"2026-05-10",kg:72.8},
   ],
   hydration:[],
   trainings:[
@@ -883,7 +884,7 @@ function showTab(id, btn) {
 function updateHeaderStatus() {
   const today=new Date().toISOString().split('T')[0];
   const ml=(D.hydration||[]).filter(h=>h.date===today).reduce((s,h)=>s+h.ml,0);
-  const hc=ml>=2000?'#69F0AE':ml>=1200?'#FFD740':'#FF4500';
+  const hc=ml>=3000?'#69F0AE':ml>=1800?'#FFD740':'#FF4500';
   const sth=document.getElementById('st-hyd'); if(sth){sth.textContent='💧 '+(ml/1000).toFixed(1)+'L';sth.style.color=hc;}
   const lw=[...D.weights].sort((a,b)=>b.date.localeCompare(a.date))[0];
   const stp=document.getElementById('st-peso'); if(stp) stp.textContent='⚖️ '+(lw?.kg||'—')+'kg';
@@ -903,10 +904,10 @@ function addHydration(ml) {
 function updateHydUI() {
   const today=new Date().toISOString().split('T')[0];
   const total=(D.hydration||[]).filter(h=>h.date===today).reduce((s,h)=>s+h.ml,0);
-  const pct=Math.min(100,(total/2000)*100);
-  const c=total>=2000?'#69F0AE':total>=1200?'#FFD740':'#FF4500';
+  const pct=Math.min(100,(total/3000)*100);
+  const c=total>=3000?'#69F0AE':total>=1800?'#FFD740':'#FF4500';
   const bar=document.getElementById('hyd-bar'); if(bar){bar.style.width=pct+'%';bar.style.background=c;}
-  const dis=document.getElementById('hyd-display'); if(dis){dis.textContent=(total/1000).toFixed(1)+'L / 2,0L';dis.style.color=c;}
+  const dis=document.getElementById('hyd-display'); if(dis){dis.textContent=(total/1000).toFixed(1)+'L / 3,0L';dis.style.color=c;}
 }
 
 // ═══════════════════════════════════════════════════════
