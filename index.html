@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Adriano Ortolani · Command Center · Maratona Rio 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0a0a0a; --bg2:#111; --bg3:#181818;
+  --border:#1f1f1f; --border2:#2a2a2a;
+  --text:#f0f0f0; --muted:#555; --faint:#333;
+  --orange:#FF4500; --green:#69F0AE; --blue:#4FC3F7;
+  --yellow:#FFD740; --purple:#CE93D8; --red:#FF7043;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.5;overflow-x:hidden}
+h1,h2,h3{font-family:'Oswald',sans-serif}
+
+/* ── LAYOUT ── */
+#header{background:linear-gradient(180deg,#160400 0%,#0a0a0a 100%);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.header-inner{padding:14px 14px 0}
+.header-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px}
+.header-left{flex:1}
+.app-label{font-size:8px;color:var(--orange);letter-spacing:.2em;text-transform:uppercase;margin-bottom:3px}
+.app-name{font-family:'Oswald',sans-serif;font-size:22px;font-weight:900;line-height:1}
+.app-name span{color:var(--orange)}
+.header-status{display:flex;gap:8px;margin-top:5px;flex-wrap:wrap}
+.status-pill{font-size:10px;display:flex;align-items:center;gap:3px}
+
+/* ── COUNTDOWNS ── */
+.cds{display:flex;flex-direction:column;gap:5px;flex-shrink:0}
+.cd-box{border-radius:7px;padding:6px 10px}
+.cd-box.race{background:#160300;border:1px solid rgba(255,69,0,.2)}
+.cd-box.asics{background:#001503;border:1px solid rgba(105,240,174,.2)}
+.cd-label{font-size:7px;text-align:center;letter-spacing:.12em;margin-bottom:4px;text-transform:uppercase}
+.cd-nums{display:flex;gap:4px;align-items:center}
+.cd-num{text-align:center}
+.cd-num .n{font-family:'Oswald',sans-serif;font-size:26px;font-weight:900;line-height:1}
+.cd-num .u{font-size:7px;color:var(--muted);margin-top:1px;letter-spacing:.1em}
+.cd-sep{font-weight:900;font-size:14px;padding-bottom:12px}
+
+/* ── TABS ── */
+.tabs{display:flex;overflow-x:auto;padding:0 4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab-btn{background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;padding:10px 11px;font-size:10px;font-weight:700;white-space:nowrap;font-family:'DM Sans',sans-serif;letter-spacing:.04em;color:var(--muted);transition:color .15s}
+.tab-btn.active{color:var(--orange);border-bottom-color:var(--orange)}
+.tab-btn:hover{color:var(--orange)}
+
+/* ── CONTENT ── */
+#content{padding:14px;padding-bottom:40px}
+.panel{display:none;animation:fi .25s ease}
+.panel.active{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── CARDS ── */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px}
+.card.accent{border-top-width:3px}
+.card-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.card-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.stat-label{font-size:8px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.stat-value{font-family:'Oswald',sans-serif;font-size:22px;font-weight:900;line-height:1}
+.stat-sub{font-size:9px;color:#444;margin-top:3px}
+.seclabel{font-size:9px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;font-weight:600;margin-bottom:10px}
+
+/* ── TAGS ── */
+.tag{display:inline-block;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700;letter-spacing:.06em;border:1px solid}
+
+/* ── FORMS ── */
+input[type=text],input[type=number],input[type=date],select,textarea{width:100%;background:#1a1a1a;border:1px solid var(--border2);border-radius:6px;padding:8px 11px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;outline:none;transition:border-color .2s;margin-bottom:10px}
+input:focus,select:focus,textarea:focus{border-color:var(--orange)}
+textarea{resize:vertical}
+label.fl{display:flex;align-items:center;gap:8px;font-size:12px;color:#aaa;cursor:pointer;margin-bottom:10px}
+input[type=checkbox]{width:auto;margin-bottom:0;accent-color:var(--purple)}
+input[type=range]{width:100%;accent-color:var(--orange);margin-bottom:10px}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:6px;padding:9px 18px;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:.04em;transition:opacity .15s;border:1px solid}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-primary{background:var(--orange);border-color:var(--orange);color:#000}
+.btn-outline{background:transparent;color:var(--orange);border-color:var(--orange)}
+.btn-green{background:var(--green);border-color:var(--green);color:#000}
+.btn-green-outline{background:transparent;color:var(--green);border-color:var(--green)}
+.btn-blue{background:var(--blue);border-color:var(--blue);color:#000}
+.btn-yellow{background:var(--yellow);border-color:var(--yellow);color:#000}
+.btn-sm{padding:5px 12px;font-size:10px}
+.btn-full{width:100%}
+
+/* ── HYDRATION ── */
+.hyd-bar-wrap{height:6px;background:#1a1a1a;border-radius:3px;overflow:hidden;margin-bottom:10px}
+.hyd-bar{height:100%;border-radius:3px;transition:width .4s}
+.hyd-btns{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.hyd-btn{background:#1a1a1a;border:1px solid;border-radius:6px;padding:8px 4px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;text-align:center;transition:background .15s}
+.hyd-btn:hover{background:#222}
+
+/* ── TIMELINE ── */
+.tl-item{display:flex;gap:10px}
+.tl-left{display:flex;flex-direction:column;align-items:center}
+.tl-dot{width:34px;height:34px;border-radius:50%;border:2px solid;background:var(--bg);display:flex;align-items:center;justify-content:center;font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;flex-shrink:0}
+.tl-line{width:1px;flex:1;background:var(--border);min-height:12px;margin:3px 0}
+.tl-content{flex:1;background:#0e0e0e;border:1px solid;border-left-width:3px;border-radius:6px;padding:9px 12px;margin-bottom:8px}
+.tl-title{font-size:12px;font-weight:600;margin-bottom:4px}
+.tl-tags{display:flex;gap:4px;flex-wrap:wrap}
+
+/* ── SPLITS ── */
+.split-card{border-left:4px solid;border-radius:8px;padding:12px 14px;margin-bottom:8px;background:var(--bg2);border-top:1px solid var(--border);border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
+.split-head{display:flex;justify-content:space-between;margin-bottom:6px}
+.split-trecho{font-family:'Oswald',sans-serif;font-size:14px;font-weight:700}
+.split-dica{font-size:11px;color:#888;line-height:1.6}
+
+/* ── TRAINING ROW ── */
+.training-row{padding:10px 12px;margin-bottom:6px;border-left:3px solid;background:#0e0e0e;border-radius:0 8px 8px 0}
+
+/* ── ALERT ── */
+.alert{border-radius:8px;padding:10px 12px;margin-bottom:12px}
+.highlight{border-radius:8px;padding:12px 14px;border-left:4px solid;margin-bottom:12px}
+
+/* ── NUTRI ── */
+.nutri-area{background:#001208;border:2px solid rgba(105,240,174,.3);border-radius:12px;padding:16px;margin-bottom:14px}
+.nutri-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;flex-shrink:0;margin-top:4px}
+.nutri-textarea{background:#0a1a0e!important;border-color:#1a3a25!important;color:var(--green)!important}
+.nutri-textarea:focus{border-color:var(--green)!important}
+.nutri-q{background:var(--bg);border:1px solid #1a3a25;border-radius:8px;padding:14px;margin-bottom:12px}
+.nutri-q-label{font-size:9px;color:var(--green);font-weight:700;letter-spacing:.08em;margin-bottom:4px}
+.nutri-q-text{font-size:11px;color:#4a7a5a;line-height:1.5;margin-bottom:8px}
+
+/* ── SYNC STATUS ── */
+.sync-box{border-radius:8px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.sync-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sync-dot.ok{background:var(--green);animation:pulse 2s infinite}
+.sync-dot.pending{background:var(--yellow)}
+.sync-dot.error{background:var(--red)}
+
+/* ── WEIGHT CHART ── */
+.w-chart{display:flex;gap:8px;align-items:flex-end;height:70px;margin:10px 0 4px}
+.w-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px}
+.w-bar{width:100%;border-radius:3px 3px 0 0}
+.w-bar-date{font-size:7px;color:var(--muted);text-align:center;margin-top:2px}
+
+/* ── SETUP MODAL ── */
+#setup-modal{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px}
+.setup-box{background:#111;border:1px solid var(--border);border-radius:12px;padding:24px;max-width:460px;width:100%}
+.setup-step{display:flex;gap:12px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.setup-step:last-of-type{border-bottom:none}
+.setup-num{width:28px;height:28px;border-radius:50%;background:var(--orange);color:#000;font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.setup-text{font-size:12px;color:#bbb;line-height:1.6}
+.setup-text strong{color:var(--text)}
+.setup-text code{background:#1a1a1a;padding:2px 6px;border-radius:4px;font-size:11px;color:var(--orange);font-family:monospace}
+
+/* ── MISC ── */
+.weather-compact{display:flex;gap:8px;align-items:center;background:#181818;border-radius:8px;padding:8px 12px;margin-bottom:12px}
+.fg{display:flex;gap:8px}
+.fg>*{flex:1}
+.temp-row{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
+.temp-row:last-child{border-bottom:none}
+#toast{position:fixed;bottom:20px;right:14px;padding:10px 16px;border-radius:8px;font-size:12px;font-weight:700;display:none;z-index:998;box-shadow:0 4px 20px rgba(0,0,0,.5)}
+#toast.show{display:block;animation:fi .2s ease}
+.nutri-saved-item{margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.nutri-saved-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{display:inline-block;width:12px;height:12px;border:2px solid #333;border-top-color:var(--green);border-radius:50%;animation:spin .8s linear infinite}
+</style>
+</head>
+<body>
+
+<!-- SETUP MODAL -->
+<div id="setup-modal" style="display:none">
+  <div class="setup-box">
+    <div style="font-family:'Oswald',sans-serif;font-size:20px;font-weight:700;color:var(--orange);margin-bottom:4px">⚙️ CONFIGURAÇÃO INICIAL</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:20px">Faça isso uma vez para ativar a sincronização com o Google Sheets</div>
+
+    <div class="setup-step">
+      <div class="setup-num">1</div>
+      <div class="setup-text">
+        <strong>Crie uma planilha Google</strong><br>
+        Acesse <a href="https://sheets.new" target="_blank" style="color:var(--green)">sheets.new</a> → crie uma planilha em branco → copie o ID da URL:<br>
+        <code>docs.google.com/spreadsheets/d/<strong>[ID AQUI]</strong>/edit</code>
+      </div>
+    </div>
+
+    <div class="setup-step">
+      <div class="setup-num">2</div>
+      <div class="setup-text">
+        <strong>Crie o Apps Script</strong><br>
+        Na planilha → menu <strong>Extensões → Apps Script</strong> → apague o código existente → cole o conteúdo do arquivo <code>apps-script.js</code> → substitua <code>COLE_SEU_SHEET_ID_AQUI</code> pelo ID da planilha → salve (💾)
+      </div>
+    </div>
+
+    <div class="setup-step">
+      <div class="setup-num">3</div>
+      <div class="setup-text">
+        <strong>Implante como Web App</strong><br>
+        No Apps Script → <strong>Implantar → Nova implantação</strong> → tipo: <strong>App da Web</strong> → "Quem pode acessar": <strong>Qualquer pessoa</strong> → Implantar → copie a URL gerada
+      </div>
+    </div>
+
+    <div class="setup-step">
+      <div class="setup-num">4</div>
+      <div class="setup-text">
+        <strong>Cole a URL abaixo e salve</strong>
+      </div>
+    </div>
+
+    <input type="text" id="setup-url" placeholder="https://script.google.com/macros/s/..." style="margin-bottom:12px">
+    <button class="btn btn-primary btn-full" onclick="saveSetup()">✓ Salvar e ativar sincronização</button>
+    <button class="btn btn-outline btn-full" style="margin-top:8px" onclick="skipSetup()">Usar sem sincronização (apenas local)</button>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div id="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="header-left">
+        <div class="app-label">Command Center · Maratona Rio 2026</div>
+        <div class="app-name">ADRIANO <span>ORTOLANI</span></div>
+        <div class="header-status">
+          <div class="status-pill" id="st-hyd" style="color:#FFD740">💧 0,0L</div>
+          <div class="status-pill" style="color:#555">·</div>
+          <div class="status-pill" id="st-peso" style="color:#4FC3F7">⚖️ —kg</div>
+          <div class="status-pill" id="st-sync" style="color:#555;display:none">· 🔄 Sync</div>
+          <div class="status-pill" id="st-nutri" style="color:#69F0AE;display:none">· 👩‍⚕️ ✓</div>
+        </div>
+      </div>
+      <div class="cds">
+        <div class="cd-box race">
+          <div class="cd-label" style="color:#FF4500">Maratona · 07/Jun</div>
+          <div class="cd-nums">
+            <div class="cd-num"><div class="n" id="cd-rd" style="color:#FF4500">28</div><div class="u">DIAS</div></div>
+            <div class="cd-sep" style="color:#FF4500">:</div>
+            <div class="cd-num"><div class="n" id="cd-rh" style="color:#FF4500">00</div><div class="u">HRS</div></div>
+            <div class="cd-sep" style="color:#FF4500">:</div>
+            <div class="cd-num"><div class="n" id="cd-rm" style="color:#FF4500">00</div><div class="u">MIN</div></div>
+          </div>
+        </div>
+        <div class="cd-box asics">
+          <div class="cd-label" style="color:#69F0AE">Asics 21K · 17/Mai</div>
+          <div class="cd-nums">
+            <div class="cd-num"><div class="n" id="cd-ad" style="color:#69F0AE">07</div><div class="u">DIAS</div></div>
+            <div class="cd-sep" style="color:#69F0AE">:</div>
+            <div class="cd-num"><div class="n" id="cd-ah" style="color:#69F0AE">00</div><div class="u">HRS</div></div>
+            <div class="cd-sep" style="color:#69F0AE">:</div>
+            <div class="cd-num"><div class="n" id="cd-am" style="color:#69F0AE">00</div><div class="u">MIN</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('home',this)">🏠 Home</button>
+    <button class="tab-btn" onclick="showTab('estrategia',this)">🧠 Estratégia</button>
+    <button class="tab-btn" onclick="showTab('geis',this)">💊 Géis</button>
+    <button class="tab-btn" onclick="showTab('corpo',this)">⚖️ Corpo</button>
+    <button class="tab-btn" onclick="showTab('treinos',this)">📊 Treinos</button>
+    <button class="tab-btn" onclick="showTab('clima',this)">🌡️ Clima</button>
+    <button class="tab-btn" id="tab-nutri-btn" onclick="showTab('nutri',this)">👩‍⚕️ Nutri</button>
+    <button class="tab-btn" onclick="showTab('config',this)">⚙️</button>
+  </div>
+</div>
+
+<div id="content">
+
+  <!-- HOME -->
+  <div id="panel-home" class="panel active">
+    <!-- Sync status -->
+    <div id="sync-status-box" style="display:none" class="sync-box">
+      <div class="sync-dot" id="sync-dot"></div>
+      <div style="flex:1"><div style="font-size:9px;color:var(--muted)" id="sync-label">Verificando sincronização...</div></div>
+      <button class="btn btn-sm" id="sync-btn" onclick="syncNow()" style="background:transparent;border-color:#333;color:#666;font-size:9px">Sincronizar</button>
+    </div>
+
+    <div class="card-grid-3">
+      <div class="card accent" style="border-top-color:#FF4500;padding:12px">
+        <div class="stat-label">VO₂ Máx</div>
+        <div class="stat-value" style="color:#FF4500">52</div>
+        <div class="stat-sub">Top 10%</div>
+      </div>
+      <div class="card accent" style="border-top-color:#4FC3F7;padding:12px">
+        <div class="stat-label">VFC</div>
+        <div class="stat-value" style="color:#4FC3F7">113<span style="font-size:11px;color:#555">ms</span></div>
+        <div class="stat-sub">Equilibrado</div>
+      </div>
+      <div class="card accent" style="border-top-color:#69F0AE;padding:12px">
+        <div class="stat-label">Fitness</div>
+        <div class="stat-value" style="color:#69F0AE">169</div>
+        <div class="stat-sub">Strava</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div class="seclabel" style="margin-bottom:0">HIDRATAÇÃO HOJE</div>
+        <div id="hyd-display" style="font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:#FFD740">0,0L / 2,0L</div>
+      </div>
+      <div class="hyd-bar-wrap"><div id="hyd-bar" class="hyd-bar" style="width:0%;background:#FFD740"></div></div>
+      <div class="hyd-btns">
+        <button class="hyd-btn" style="color:#4FC3F7;border-color:rgba(79,195,247,.3)" onclick="addHydration(200)">+200ml</button>
+        <button class="hyd-btn" style="color:#4FC3F7;border-color:rgba(79,195,247,.3)" onclick="addHydration(300)">+300ml</button>
+        <button class="hyd-btn" style="color:#4FC3F7;border-color:rgba(79,195,247,.3)" onclick="addHydration(500)">+500ml</button>
+        <button class="hyd-btn" style="color:#4FC3F7;border-color:rgba(79,195,247,.3)" onclick="addHydration(750)">+750ml</button>
+      </div>
+    </div>
+
+    <div class="card" style="border-color:rgba(255,69,0,.2)">
+      <div class="seclabel" style="color:#FF4500">🎯 OBJETIVO MARATONA DO RIO</div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-family:'Oswald',sans-serif;font-size:28px;font-weight:900;color:#FF4500;line-height:1">3:38–3:45</div>
+          <div style="font-size:11px;color:#666;margin-top:3px">Pace 5:10–5:20/km</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:9px;color:#69F0AE">STRAVA PREVÊ</div>
+          <div style="font-family:'Oswald',sans-serif;font-size:22px;font-weight:900;color:#69F0AE">3:34:41</div>
+          <div style="font-size:9px;color:#555">5:05/km</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="border-color:rgba(105,240,174,.2)">
+      <div class="seclabel" style="color:#69F0AE">🏃 21K ASICS · 17/MAI · PRÓXIMA PROVA</div>
+      <div style="font-size:12px;color:#bbb;line-height:1.6;margin-bottom:8px">Teste definitivo antes do Rio. Validar protocolo de géis, pace 4:50/km e FC com postos organizados.</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <span class="tag" style="color:#69F0AE;border-color:rgba(105,240,174,.3);background:rgba(105,240,174,.1)">Pace: 4:50/km</span>
+        <span class="tag" style="color:#FFD740;border-color:rgba(255,215,64,.3);background:rgba(255,215,64,.1)">Testar géis</span>
+        <span class="tag" style="color:#CE93D8;border-color:rgba(206,147,216,.3);background:rgba(206,147,216,.1)">Protocolo Nutri</span>
+      </div>
+    </div>
+
+    <div class="weather-compact" id="weather-compact">
+      <span style="font-size:16px">🌡️</span>
+      <div style="flex:1"><div style="font-size:9px;color:#555">RIO DE JANEIRO AGORA</div><div style="font-size:12px;font-weight:600" id="wc-text">Verificando...</div></div>
+      <span id="wc-tag"></span>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <div class="seclabel" style="margin-bottom:0">ÚLTIMOS TREINOS</div>
+      </div>
+      <div id="home-trainings"></div>
+    </div>
+
+    <div class="card">
+      <div class="seclabel">POR QUE SE QUEBRA NA MARATONA</div>
+      <div id="science-list"></div>
+    </div>
+  </div>
+
+  <!-- ESTRATÉGIA -->
+  <div id="panel-estrategia" class="panel">
+    <div class="card" style="border-color:rgba(255,69,0,.2)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+        <div>
+          <div class="seclabel" style="color:#FF4500;margin-bottom:2px">ESTRATÉGIA · <span id="strat-version">v1</span></div>
+          <div style="font-size:9px;color:#444">Atualizada <span id="strat-date">2026-05-10</span></div>
+        </div>
+        <span class="tag" style="color:#FFD740;border-color:rgba(255,215,64,.3);background:rgba(255,215,64,.1)">EDITÁVEL ATÉ 01/JUN</span>
+      </div>
+      <div style="display:flex;gap:20px">
+        <div><div style="font-size:9px;color:#555">TEMPO ALVO</div><div id="strat-goal" style="font-family:'Oswald',sans-serif;font-size:26px;font-weight:900;color:#FF4500">3:38–3:45</div></div>
+        <div><div style="font-size:9px;color:#555">PACE</div><div id="strat-pace" style="font-family:'Oswald',sans-serif;font-size:20px;font-weight:700;color:#FFD740">5:10–5:20/km</div></div>
+      </div>
+      <div id="strat-notes" style="margin-top:8px;font-size:11px;color:#666;line-height:1.6"></div>
+    </div>
+    <div id="splits-container"></div>
+    <div class="card" style="border-color:rgba(105,240,174,.1)">
+      <div class="seclabel" style="color:#69F0AE">CHECKPOINTS</div>
+      <div id="checkpoints"></div>
+    </div>
+    <div style="margin-top:14px">
+      <button class="btn btn-outline btn-sm" onclick="toggleStratEdit()">✏️ Editar estratégia</button>
+    </div>
+    <div id="strat-edit-form" style="display:none;margin-top:12px">
+      <div class="card" style="border-color:rgba(255,215,64,.3)">
+        <div class="seclabel" style="color:#FFD740">EDITAR ESTRATÉGIA</div>
+        <div class="fg">
+          <div><label style="font-size:9px;color:#555">TEMPO ALVO</label><input type="text" id="edit-goal" placeholder="3:38–3:45"></div>
+          <div><label style="font-size:9px;color:#555">PACE ALVO</label><input type="text" id="edit-pace" placeholder="5:10–5:20"></div>
+        </div>
+        <label style="font-size:9px;color:#555">NOTAS</label>
+        <textarea id="edit-notes" rows="3" placeholder="Observações da estratégia..."></textarea>
+        <button class="btn btn-primary btn-full" onclick="saveStrategy()">Salvar nova versão ✓</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GÉIS -->
+  <div id="panel-geis" class="panel">
+    <div class="alert" style="background:#001208;border-left:4px solid #69F0AE">
+      <div style="font-size:10px;color:#69F0AE;font-weight:700;margin-bottom:3px">✅ TESTADO · 32K RJ · 09/05/2026</div>
+      <div style="font-size:11px;color:#bbb">Sem GI · Boa energia até km30 · Problema foi falta d'água (treino s/ suporte)</div>
+    </div>
+    <div class="seclabel">PROTOCOLO MARATONA · FERNANDA MICELLI CRN3 83.511</div>
+    <div id="gel-timeline"></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;padding:10px 12px;background:#0e0e0e;border-radius:8px;border:1px solid var(--border);margin-top:10px">
+      <div style="font-size:10px"><span style="color:#69F0AE;font-weight:700">215g</span> <span style="color:#555">carb (68g/h)</span></div>
+      <div style="font-size:10px"><span style="color:#FFD740;font-weight:700">1.775mg</span> <span style="color:#555">sódio</span></div>
+      <div style="font-size:10px"><span style="color:#FF4500;font-weight:700">700mg</span> <span style="color:#555">cafeína total</span></div>
+      <div style="font-size:10px"><span style="color:#4FC3F7;font-weight:700">~2L</span> <span style="color:#555">água</span></div>
+    </div>
+    <div style="margin-top:16px">
+      <div class="seclabel" style="color:#FFD740">ANÁLISE 32K RJ</div>
+      <div id="gel-analysis"></div>
+    </div>
+    <div id="nutri-gel-rec" style="display:none;margin-top:14px">
+      <div class="alert" style="background:#001208;border-left:4px solid #69F0AE">
+        <div style="font-size:9px;color:#69F0AE;font-weight:700;margin-bottom:5px">👩‍⚕️ RECOMENDAÇÃO DRA. FERNANDA · PROTOCOLO DE GÉIS</div>
+        <div id="nutri-gel-rec-text" style="font-size:12px;color:#bbb;line-height:1.6;white-space:pre-wrap"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CORPO -->
+  <div id="panel-corpo" class="panel">
+    <div class="card-grid-3">
+      <div class="card accent" style="border-top-color:#4FC3F7;padding:12px;text-align:center">
+        <div class="stat-label">Peso atual</div>
+        <div class="stat-value" id="peso-atual" style="color:#4FC3F7">73,9<span style="font-size:11px;color:#555">kg</span></div>
+        <div class="stat-sub" id="peso-data">14/04/2026</div>
+      </div>
+      <div class="card accent" style="border-top-color:#69F0AE;padding:12px;text-align:center">
+        <div class="stat-label">Variação</div>
+        <div class="stat-value" id="peso-diff" style="color:#69F0AE">-4,6<span style="font-size:11px;color:#555">kg</span></div>
+        <div class="stat-sub">vs 20/jan</div>
+      </div>
+      <div class="card accent" style="border-top-color:#FFD740;padding:12px;text-align:center">
+        <div class="stat-label">Meta</div>
+        <div class="stat-value" style="color:#FFD740">72<span style="font-size:11px;color:#555">kg</span></div>
+        <div class="stat-sub">até 07/jun</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="seclabel">EVOLUÇÃO · JAN → ABR 2026</div>
+      <div style="display:grid;grid-template-columns:auto 1fr 1fr auto;gap:6px 12px;align-items:center">
+        <div></div><div style="font-size:9px;color:#555;font-weight:600">20/JAN</div><div style="font-size:9px;color:#4FC3F7;font-weight:600">14/ABR</div><div style="font-size:9px;color:#555;font-weight:600">Δ</div>
+        <div style="font-size:10px;color:#777">Peso</div><div style="font-size:12px;font-weight:600">78,5kg</div><div style="font-size:12px;font-weight:600;color:#4FC3F7">73,9kg</div><div style="font-size:11px;font-weight:700;color:#69F0AE">-4,6</div>
+        <div style="font-size:10px;color:#777">% Gordura</div><div style="font-size:12px;font-weight:600">20,5%</div><div style="font-size:12px;font-weight:600;color:#4FC3F7">19,8%</div><div style="font-size:11px;font-weight:700;color:#69F0AE">-0,7%</div>
+        <div style="font-size:10px;color:#777">Massa magra</div><div style="font-size:12px;font-weight:600">62,4kg</div><div style="font-size:12px;font-weight:600;color:#4FC3F7">59,2kg</div><div style="font-size:11px;font-weight:700;color:#FF4500">-3,2</div>
+      </div>
+    </div>
+    <div class="alert" style="background:#1a0800;border-left:4px solid #FF4500">
+      <div style="font-size:10px;color:#FF4500;font-weight:700;margin-bottom:4px">⚠️ PONTO DE ATENÇÃO · Para avaliação da Dra. Fernanda</div>
+      <div style="font-size:11px;color:#bbb;line-height:1.6">Perda de <strong style="color:#FF4500">3,2kg de massa magra</strong> com volume alto (268km/mês em abril). Ingestão proteica adequada?</div>
+    </div>
+    <div class="card">
+      <div class="seclabel">HISTÓRICO DE PESO</div>
+      <div class="w-chart" id="weight-chart"></div>
+      <div id="weight-history"></div>
+    </div>
+    <div class="card" style="border-color:rgba(79,195,247,.3)">
+      <div class="seclabel" style="color:#4FC3F7">REGISTRAR PESO</div>
+      <div class="fg">
+        <div><label style="font-size:9px;color:#555">DATA</label><input type="date" id="new-kg-date"></div>
+        <div><label style="font-size:9px;color:#555">PESO (kg)</label><input type="number" id="new-kg" placeholder="73.5" step="0.1"></div>
+      </div>
+      <button class="btn btn-blue btn-full" onclick="addWeight()">Salvar peso ✓</button>
+      <div style="font-size:9px;color:#333;margin-top:6px">⏰ Toda seg 06:30 — em jejum, antes do treino</div>
+    </div>
+    <div id="nutri-corpo-rec" style="display:none;margin-top:12px">
+      <div class="alert" style="background:#001208;border-left:4px solid #69F0AE">
+        <div style="font-size:9px;color:#69F0AE;font-weight:700;margin-bottom:5px">👩‍⚕️ RECOMENDAÇÃO DRA. FERNANDA · COMPOSIÇÃO CORPORAL</div>
+        <div id="nutri-corpo-rec-text" style="font-size:12px;color:#bbb;line-height:1.6;white-space:pre-wrap"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TREINOS -->
+  <div id="panel-treinos" class="panel">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div class="seclabel" style="margin-bottom:0" id="treinos-count">— TREINOS</div>
+      <button class="btn btn-primary btn-sm" onclick="toggleAddTraining()">+ Treino</button>
+    </div>
+    <div id="add-training-form" style="display:none">
+      <div class="card" style="border-color:rgba(255,69,0,.2);margin-bottom:14px">
+        <div class="seclabel" style="color:#FF4500">NOVO TREINO</div>
+        <div class="fg">
+          <div><label style="font-size:9px;color:#555">DATA</label><input type="date" id="t-date"></div>
+          <div><label style="font-size:9px;color:#555">TIPO</label>
+            <select id="t-type">
+              <option value="longao">Longão</option>
+              <option value="moderado" selected>Moderado</option>
+              <option value="intervalado">Intervalado</option>
+              <option value="tempo">Tempo Run</option>
+              <option value="regenerativo">Regenerativo</option>
+              <option value="forca">Força</option>
+              <option value="outro">Outro</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+          <div><label style="font-size:9px;color:#555">KM</label><input type="number" id="t-dist" placeholder="32" step="0.1"></div>
+          <div><label style="font-size:9px;color:#555">PACE</label><input type="text" id="t-pace" placeholder="5:16"></div>
+          <div><label style="font-size:9px;color:#555">FC (bpm)</label><input type="number" id="t-fc" placeholder="172"></div>
+        </div>
+        <label style="font-size:9px;color:#555">ESFORÇO <span id="t-senso-val">5</span>/10</label>
+        <input type="range" min="1" max="10" value="5" id="t-senso" oninput="document.getElementById('t-senso-val').textContent=this.value">
+        <label class="fl"><input type="checkbox" id="t-gel"> Incluiu teste de gel</label>
+        <div id="t-gel-area" style="display:none">
+          <label style="font-size:9px;color:#555">NOTAS DO GEL</label>
+          <textarea id="t-gel-notes" rows="2" placeholder="Protocolo, reação, timing..."></textarea>
+        </div>
+        <label style="font-size:9px;color:#555">OBSERVAÇÕES</label>
+        <textarea id="t-notes" rows="2" placeholder="Como foi o treino?"></textarea>
+        <button class="btn btn-primary btn-full" onclick="addTraining()">Salvar treino ✓</button>
+      </div>
+    </div>
+    <div id="trainings-list"></div>
+  </div>
+
+  <!-- CLIMA -->
+  <div id="panel-clima" class="panel">
+    <div class="seclabel">CLIMA · RIO DE JANEIRO · MARATONA 07/JUN</div>
+    <div class="card-grid-2">
+      <div class="card accent" style="border-top-color:#4FC3F7">
+        <div class="stat-label">Rio agora</div>
+        <div class="stat-value" id="clima-cur" style="color:#4FC3F7">—°C</div>
+        <div class="stat-sub" id="clima-wind">—</div>
+      </div>
+      <div class="card accent" style="border-top-color:#FF4500">
+        <div class="stat-label">07/Jun histórico</div>
+        <div class="stat-value" style="color:#FF4500;font-size:18px">22–28°C</div>
+        <div class="stat-sub">Umidade alta · Saída 6h</div>
+      </div>
+    </div>
+    <div id="clima-impact" class="alert" style="border-left:4px solid #FF4500;background:#1a0500">
+      <div id="clima-impact-title" style="font-size:10px;font-weight:700;margin-bottom:3px;color:#FF4500">Buscando clima...</div>
+      <div id="clima-impact-text" style="font-size:11px;color:#aaa"></div>
+    </div>
+    <div class="seclabel">PLANO POR TEMPERATURA</div>
+    <div class="card">
+      <div class="temp-row"><span class="tag" style="color:#69F0AE;border-color:rgba(105,240,174,.3);background:rgba(105,240,174,.1);min-width:52px;text-align:center">≤18°C</span><div style="flex:1;padding-left:10px"><div style="font-size:11px;font-weight:600">5:05–5:10/km</div><div style="font-size:10px;color:#666">Ideal. Pode apertar no km 35.</div></div></div>
+      <div class="temp-row"><span class="tag" style="color:#4FC3F7;border-color:rgba(79,195,247,.3);background:rgba(79,195,247,.1);min-width:52px;text-align:center">18–22°C</span><div style="flex:1;padding-left:10px"><div style="font-size:11px;font-weight:600">5:10–5:15/km</div><div style="font-size:10px;color:#666">Bom. Hidratação normal.</div></div></div>
+      <div class="temp-row"><span class="tag" style="color:#FFD740;border-color:rgba(255,215,64,.3);background:rgba(255,215,64,.1);min-width:52px;text-align:center">22–26°C</span><div style="flex:1;padding-left:10px"><div style="font-size:11px;font-weight:600">5:15–5:20/km</div><div style="font-size:10px;color:#666">+10s/km. Molhe cabeça em todo posto.</div></div></div>
+      <div class="temp-row"><span class="tag" style="color:#FF4500;border-color:rgba(255,69,0,.3);background:rgba(255,69,0,.1);min-width:52px;text-align:center">≥26°C</span><div style="flex:1;padding-left:10px"><div style="font-size:11px;font-weight:600">5:20–5:30/km</div><div style="font-size:10px;color:#666">+20s/km. Sal extra. Priorize chegar.</div></div></div>
+    </div>
+  </div>
+
+  <!-- NUTRI -->
+  <div id="panel-nutri" class="panel">
+    <!-- Sync status nutri -->
+    <div id="nutri-sync-info" style="display:none" class="card" style="border-color:rgba(105,240,174,.2)">
+      <div style="font-size:11px;color:#777;line-height:1.6">
+        <span id="nutri-sync-text"></span>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px">
+      <div style="font-size:11px;color:#777;line-height:1.6">
+        Esta seção é para a <strong style="color:#69F0AE">Dra. Fernanda Micelli</strong> preencher com suas recomendações.
+        As respostas são salvas <span id="sync-mode-label" style="color:#FFD740">localmente</span> e aparecem nas seções Géis e Corpo.
+      </div>
+    </div>
+
+    <div class="nutri-area">
+      <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:14px">
+        <div class="nutri-dot"></div>
+        <div>
+          <div style="font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:#69F0AE">DRA. FERNANDA MICELLI · CRN3 83.511</div>
+          <div style="font-size:10px;color:#4a7a5a;margin-top:2px">Nutrição Clínica · Maratona Rio · 14/04/2026</div>
+          <div style="font-size:9px;color:#3a5a3a;margin-top:2px" id="nutri-last-update"></div>
+        </div>
+      </div>
+
+      <div style="background:#0a1a0e;border:1px solid #1a3a25;border-radius:8px;padding:12px;margin-bottom:14px">
+        <div style="font-size:9px;color:#69F0AE;font-weight:600;letter-spacing:.1em;margin-bottom:8px">RESUMO DO ATLETA</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px">
+          <div style="font-size:10px"><span style="color:#3a6a4a">PR Meia: </span><strong style="color:#bbb">1:42:57 (26/04)</strong></div>
+          <div style="font-size:10px"><span style="color:#3a6a4a">VO₂ Máx: </span><strong style="color:#bbb">52 · Excelente</strong></div>
+          <div style="font-size:10px"><span style="color:#3a6a4a">Peso: </span><strong style="color:#bbb">73,9kg (14/04)</strong></div>
+          <div style="font-size:10px"><span style="color:#3a6a4a">Objetivo: </span><strong style="color:#bbb">3:38–3:45</strong></div>
+          <div style="font-size:10px"><span style="color:#3a6a4a">Volume pico: </span><strong style="color:#bbb">268km (abr)</strong></div>
+          <div style="font-size:10px"><span style="color:#3a6a4a">Próxima: </span><strong style="color:#bbb">21K Asics 17/05</strong></div>
+        </div>
+      </div>
+
+      <div id="nutri-questions"></div>
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+        <button class="btn btn-green" onclick="saveNutri()"><span id="save-nutri-spinner" class="spinner" style="display:none"></span> 💾 Salvar recomendações</button>
+        <button class="btn btn-green-outline" onclick="copyNutri()">📋 Copiar p/ WhatsApp</button>
+      </div>
+      <div id="nutri-saved-msg" style="font-size:11px;color:#69F0AE;margin-top:8px;display:none"></div>
+    </div>
+
+    <div id="nutri-saved-section" style="display:none">
+      <div class="card" style="border-color:rgba(105,240,174,.2)">
+        <div class="seclabel" style="color:#69F0AE">RECOMENDAÇÕES SALVAS</div>
+        <div id="nutri-saved-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFIG -->
+  <div id="panel-config" class="panel">
+    <div class="seclabel">⚙️ CONFIGURAÇÕES</div>
+
+    <div class="card" style="border-color:rgba(105,240,174,.3)">
+      <div class="seclabel" style="color:#69F0AE">SINCRONIZAÇÃO GOOGLE SHEETS</div>
+      <div style="font-size:11px;color:#777;line-height:1.6;margin-bottom:12px">
+        Cole a URL do Web App do Google Apps Script para ativar a sincronização automática das respostas da Dra. Fernanda.
+      </div>
+      <label style="font-size:9px;color:#555">URL DO APPS SCRIPT (Web App)</label>
+      <input type="text" id="config-url" placeholder="https://script.google.com/macros/s/...">
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-green" onclick="saveConfig()">💾 Salvar URL</button>
+        <button class="btn btn-green-outline btn-sm" onclick="testSync()">🔄 Testar conexão</button>
+        <button class="btn btn-sm" style="background:transparent;border-color:#333;color:#555" onclick="clearConfig()">✕ Limpar</button>
+      </div>
+      <div id="config-status" style="font-size:11px;margin-top:8px;display:none"></div>
+    </div>
+
+    <div class="card">
+      <div class="seclabel">STATUS ATUAL</div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <div class="sync-dot" id="config-sync-dot" style="background:#555"></div>
+        <div style="font-size:12px" id="config-sync-status">Sem sincronização configurada</div>
+      </div>
+      <div style="font-size:10px;color:#444;margin-top:8px" id="config-last-sync"></div>
+    </div>
+
+    <div class="card">
+      <div class="seclabel" style="color:#FFD740">COMO CONFIGURAR (PASSO A PASSO)</div>
+      <div id="setup-steps-inline"></div>
+    </div>
+
+    <div class="card" style="margin-top:4px">
+      <div class="seclabel">DADOS LOCAIS</div>
+      <div style="font-size:11px;color:#777;margin-bottom:10px">Seus dados estão salvos localmente neste navegador.</div>
+      <button class="btn btn-sm" style="background:transparent;border-color:#FF4500;color:#FF4500" onclick="clearAllData()">🗑️ Limpar todos os dados locais</button>
+    </div>
+  </div>
+
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// CONFIG & STATE
+// ═══════════════════════════════════════════════════════
+const SCRIPT_URL_KEY = 'adriano-script-url';
+const DATA_KEY = 'adriano-cc-v2';
+
+// URL do Apps Script já configurada
+const SCRIPT_URL_FIXED = 'https://script.google.com/macros/s/AKfycbykaE5yxJiKGhMBxuyOKpPTiVf99Me8JPEOg-wj_CsbjC_AF5LTT5PFJnuu-_8eYJ5hgw/exec';
+if (!localStorage.getItem(SCRIPT_URL_KEY)) {
+  localStorage.setItem(SCRIPT_URL_KEY, SCRIPT_URL_FIXED);
+}
+
+let scriptUrl = localStorage.getItem(SCRIPT_URL_KEY) || SCRIPT_URL_FIXED;
+
+const DEFAULT = {
+  weights:[
+    {date:"2026-01-20",kg:78.5},
+    {date:"2026-04-14",kg:73.9},
+  ],
+  hydration:[],
+  trainings:[
+    {id:"t1",date:"2026-05-02",type:"longao",dist:30,pace:"5:05",fc:169,tSenso:8,notes:"3º melhor 30K · com Vinnie P",gelTest:false},
+    {id:"t2",date:"2026-05-04",type:"moderado",dist:14,pace:"5:11",fc:151,tSenso:4,notes:"Regenerativo controlado",gelTest:false},
+    {id:"t3",date:"2026-05-05",type:"intervalado",dist:14.6,pace:"4:48",fc:169,tSenso:8,notes:"3×3000m Mode Hard · com Rodrigo G",gelTest:false},
+    {id:"t4",date:"2026-05-07",type:"tempo",dist:12.7,pace:"5:01",fc:166,tSenso:6,notes:"9km alvo 4:45/km",gelTest:false},
+    {id:"t5",date:"2026-05-09",type:"longao",dist:32,pace:"5:16",fc:172,tSenso:3,notes:"PR 30K · Teste nutrição RJ",gelTest:true,gelNotes:"Protocolo Micelli completo. Ok no GI. Esqueceu km27. Problema foi falta d'água."},
+  ],
+  strategy:{
+    version:1,lastUpdated:"2026-05-10",goalTime:"3:38–3:45",goalPace:"5:10–5:20",
+    notes:"v1 — PR meia 1:42, VO2 52, longão 32K 5:16. Atualizar após 21K Asics.",
+    splits:[
+      {trecho:"0–10km",pace:"5:15–5:20",fc:"160–168",dica:"Saída conservadora. Calor do Rio exige economia."},
+      {trecho:"10–21km",pace:"5:10–5:15",fc:"168–174",dica:"Estabilize. Gel km12 + cápsula sal."},
+      {trecho:"21–30km",pace:"5:15–5:20",fc:"174–180",dica:"Prova começa aqui. Power Powder km22."},
+      {trecho:"30–35km",pace:"5:20–5:30",fc:"178–185",dica:"O muro. Hidrogel+caf. Fragmentar: 1km por vez."},
+      {trecho:"35–42km",pace:"5:10–5:20",fc:"183–188",dica:"Larga tudo. FC máx 188. Final no Aterro."},
+    ]
+  },
+  nutriNotes:{q1:"",q2:"",q3:"",q4:"",q5:"",q6:"",lastUpdated:"",syncedAt:""},
+};
+
+const TIPO_L = {longao:"Longão",moderado:"Moderado",intervalado:"Intervalado",tempo:"Tempo Run",regenerativo:"Regenerativo",forca:"Força",outro:"Outro"};
+const TIPO_C = {longao:"#FF4500",moderado:"#4FC3F7",intervalado:"#FF7043",tempo:"#FFD740",regenerativo:"#69F0AE",forca:"#CE93D8",outro:"#888"};
+
+const GELS = [
+  {km:"Pré",item:"Hidrogel duplo s/caf",carb:25,ml:100,caf:false,sal:false,color:"#CE93D8"},
+  {km:"6K",item:"Gel Z2 Lemon",carb:25,ml:200,caf:false,sal:false,color:"#69F0AE"},
+  {km:"12K",item:"Hidrogel duplo + Cápsula Sal",carb:25,ml:100,caf:false,sal:true,color:"#FFD740"},
+  {km:"18K",item:"Z2 Double Espresso",carb:25,ml:100,caf:true,sal:false,color:"#FF7043"},
+  {km:"22K",item:"Z2 Power Powder (1 sachê)",carb:40,ml:375,caf:false,sal:false,color:"#4FC3F7"},
+  {km:"27K",item:"Hidrogel duplo c/caf + Sal",carb:25,ml:100,caf:true,sal:true,color:"#FF4500"},
+  {km:"30K",item:"Gel Z2 Tangerina",carb:25,ml:200,caf:false,sal:false,color:"#69F0AE"},
+];
+
+const NUTRI_Q = [
+  {id:"q1",label:"01 · Avaliação do protocolo de géis (Maratona)",text:"O protocolo foi testado no 32K RJ sem GI. Problema foi logístico (falta d'água). Para o Rio com postos a cada 2–3km, o protocolo base precisa de ajuste?"},
+  {id:"q2",label:"02 · Protocolo do 21K Asics (17/05)",text:"Qual protocolo recomenda para ~1h40 de prova? Quais géis, em que km, com quanto de água?"},
+  {id:"q3",label:"03 · Perda de massa magra (3,2kg em 3 meses)",text:"Perda de 3,2kg de massa magra com volume alto (268km/mês). Ingestão proteica adequada? Ajustar plano?"},
+  {id:"q4",label:"04 · Km 30–42 · O Muro",text:"Último gel no km30. Faltam 12km (~60–70min). Considerar reposição adicional entre km33–35?"},
+  {id:"q5",label:"05 · Cafeína · Timing e dosagem",text:"400mg pré + 200mg km18 + caf km27 = ~700mg (9mg/kg). Está ideal? Ajuste para km30–40?"},
+  {id:"q6",label:"06 · Observações livres",text:"Outros ajustes no plano, suplementação adicional ou recomendações para as últimas 4 semanas."},
+];
+
+let D = JSON.parse(JSON.stringify(DEFAULT));
+try { const s = localStorage.getItem(DATA_KEY); if(s) D = JSON.parse(s); } catch(e) {}
+
+function saveLocal() {
+  try { localStorage.setItem(DATA_KEY, JSON.stringify(D)); } catch(e) {}
+  updateHeaderStatus();
+}
+
+function showToast(msg='✓ Salvo!', color='#69F0AE', bg='#001208') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.background = bg; t.style.color = color;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ═══════════════════════════════════════════════════════
+// GOOGLE SHEETS SYNC
+// ═══════════════════════════════════════════════════════
+function saveConfig() {
+  const url = document.getElementById('config-url').value.trim();
+  if (!url) { showStatus('config-status', 'Cole a URL do Apps Script', '#FF4500'); return; }
+  scriptUrl = url;
+  localStorage.setItem(SCRIPT_URL_KEY, url);
+  updateSyncUI();
+  showStatus('config-status', '✓ URL salva! Clique em "Testar conexão".', '#69F0AE');
+}
+
+function clearConfig() {
+  scriptUrl = '';
+  localStorage.removeItem(SCRIPT_URL_KEY);
+  document.getElementById('config-url').value = '';
+  updateSyncUI();
+}
+
+function clearAllData() {
+  if (!confirm('Tem certeza? Isso apaga todos os dados locais.')) return;
+  localStorage.removeItem(DATA_KEY);
+  location.reload();
+}
+
+async function testSync() {
+  if (!scriptUrl) { showStatus('config-status', '⚠️ Nenhuma URL configurada', '#FFD740'); return; }
+  showStatus('config-status', '🔄 Testando...', '#4FC3F7');
+  try {
+    const r = await fetch(scriptUrl);
+    const j = await r.json();
+    if (j.ok !== undefined) {
+      showStatus('config-status', '✅ Conexão OK! Sincronização ativa.', '#69F0AE');
+      updateSyncUI(true);
+    } else {
+      showStatus('config-status', '⚠️ Resposta inesperada do servidor', '#FFD740');
+    }
+  } catch(e) {
+    showStatus('config-status', '❌ Erro: ' + e.message + ' — Verifique a URL e as permissões.', '#FF4500');
+  }
+}
+
+async function syncNow() {
+  if (!scriptUrl) return;
+  const btn = document.getElementById('sync-btn');
+  if (btn) { btn.textContent = '🔄'; btn.disabled = true; }
+  document.getElementById('st-sync').style.display = 'flex';
+  try {
+    const r = await fetch(scriptUrl);
+    const j = await r.json();
+    if (j.ok && j.data) {
+      const remote = j.data;
+      // Só atualiza se a versão remota for mais nova
+      if (remote.lastUpdated && remote.lastUpdated >= (D.nutriNotes.lastUpdated || '')) {
+        D.nutriNotes = {
+          q1: remote.q1 || '', q2: remote.q2 || '',
+          q3: remote.q3 || '', q4: remote.q4 || '',
+          q5: remote.q5 || '', q6: remote.q6 || '',
+          lastUpdated: remote.lastUpdated || '',
+          syncedAt: new Date().toISOString(),
+        };
+        saveLocal();
+        renderNutriForm();
+        updateNutriRecs();
+        showToast('👩‍⚕️ Recomendações da Dra. Fernanda sincronizadas!', '#000', '#69F0AE');
+        updateSyncUI(true, remote.timestamp);
+      } else {
+        showToast('✓ Já está atualizado', '#69F0AE');
+        updateSyncUI(true);
+      }
+    } else {
+      updateSyncUI(true);
+    }
+  } catch(e) {
+    showToast('⚠️ Erro na sincronização', '#000', '#FFD740');
+    updateSyncUI(false);
+  }
+  if (btn) { btn.textContent = 'Sincronizar'; btn.disabled = false; }
+  document.getElementById('st-sync').style.display = 'none';
+}
+
+async function sendToSheets(notes) {
+  if (!scriptUrl) return false;
+  try {
+    await fetch(scriptUrl, {
+      method: 'POST',
+      body: JSON.stringify({ tipo: 'nutri', ...notes, autor: 'Dra. Fernanda Micelli' }),
+    });
+    return true;
+  } catch(e) {
+    return false;
+  }
+}
+
+function updateSyncUI(connected, lastSync) {
+  const hasUrl = !!scriptUrl;
+  const box = document.getElementById('sync-status-box');
+  const dot = document.getElementById('sync-dot');
+  const label = document.getElementById('sync-label');
+  const modeLabel = document.getElementById('sync-mode-label');
+  const configDot = document.getElementById('config-sync-dot');
+  const configStatus = document.getElementById('config-sync-status');
+  const configLastSync = document.getElementById('config-last-sync');
+
+  if (box) box.style.display = hasUrl ? 'flex' : 'none';
+  if (document.getElementById('config-url')) document.getElementById('config-url').value = scriptUrl;
+
+  if (hasUrl && connected) {
+    if (dot) { dot.className = 'sync-dot ok'; }
+    if (label) label.textContent = 'Sincronização ativa · Google Sheets conectado';
+    if (modeLabel) { modeLabel.textContent = 'no Google Sheets (automático)'; modeLabel.style.color = '#69F0AE'; }
+    if (configDot) { configDot.className = 'sync-dot'; configDot.style.background = '#69F0AE'; configDot.style.animation = 'pulse 2s infinite'; }
+    if (configStatus) { configStatus.textContent = 'Conectado e sincronizando'; configStatus.style.color = '#69F0AE'; }
+    if (configLastSync && lastSync) configLastSync.textContent = 'Última atualização da Dra. Fernanda: ' + lastSync;
+  } else if (hasUrl) {
+    if (dot) { dot.className = 'sync-dot pending'; }
+    if (label) label.textContent = 'URL configurada · clique para sincronizar';
+    if (modeLabel) { modeLabel.textContent = 'no Google Sheets (aguardando)'; modeLabel.style.color = '#FFD740'; }
+    if (configDot) { configDot.className = 'sync-dot'; configDot.style.background = '#FFD740'; configDot.style.animation = 'none'; }
+    if (configStatus) { configStatus.textContent = 'URL configurada · não testado ainda'; configStatus.style.color = '#FFD740'; }
+  } else {
+    if (modeLabel) { modeLabel.textContent = 'localmente (sem sync)'; modeLabel.style.color = '#FFD740'; }
+    if (configDot) { configDot.className = 'sync-dot'; configDot.style.background = '#555'; configDot.style.animation = 'none'; }
+    if (configStatus) { configStatus.textContent = 'Sem sincronização configurada'; configStatus.style.color = '#555'; }
+  }
+}
+
+function showStatus(elId, msg, color) {
+  const el = document.getElementById(elId);
+  if (el) { el.textContent = msg; el.style.color = color; el.style.display = 'block'; }
+}
+
+// Auto-sync a cada 5 minutos se tiver URL
+setInterval(() => { if (scriptUrl) syncNow(); }, 5 * 60 * 1000);
+
+// ═══════════════════════════════════════════════════════
+// COUNTDOWN
+// ═══════════════════════════════════════════════════════
+function updateCountdowns() {
+  const now = new Date();
+  function calc(t) {
+    const d = t-now; if(d<=0) return {d:0,h:0,m:0};
+    return {d:Math.floor(d/86400000),h:Math.floor((d%86400000)/3600000),m:Math.floor((d%3600000)/60000)};
+  }
+  const r=calc(new Date("2026-06-07T06:00:00")), a=calc(new Date("2026-05-17T07:00:00"));
+  const p=v=>String(v).padStart(2,'0');
+  ['rd','rh','rm'].forEach((id,i)=>{ const el=document.getElementById('cd-'+id); if(el) el.textContent=p([r.d,r.h,r.m][i]); });
+  ['ad','ah','am'].forEach((id,i)=>{ const el=document.getElementById('cd-'+id); if(el) el.textContent=p([a.d,a.h,a.m][i]); });
+}
+setInterval(updateCountdowns,1000); updateCountdowns();
+
+// ═══════════════════════════════════════════════════════
+// TABS
+// ═══════════════════════════════════════════════════════
+function showTab(id, btn) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(id==='treinos') renderTrainings();
+  if(id==='corpo') renderWeightChart();
+}
+
+// ═══════════════════════════════════════════════════════
+// HEADER STATUS
+// ═══════════════════════════════════════════════════════
+function updateHeaderStatus() {
+  const today=new Date().toISOString().split('T')[0];
+  const ml=(D.hydration||[]).filter(h=>h.date===today).reduce((s,h)=>s+h.ml,0);
+  const hc=ml>=2000?'#69F0AE':ml>=1200?'#FFD740':'#FF4500';
+  const sth=document.getElementById('st-hyd'); if(sth){sth.textContent='💧 '+(ml/1000).toFixed(1)+'L';sth.style.color=hc;}
+  const lw=[...D.weights].sort((a,b)=>b.date.localeCompare(a.date))[0];
+  const stp=document.getElementById('st-peso'); if(stp) stp.textContent='⚖️ '+(lw?.kg||'—')+'kg';
+  const hasN=NUTRI_Q.some(q=>D.nutriNotes[q.id]);
+  const stn=document.getElementById('st-nutri'); if(stn) stn.style.display=hasN?'flex':'none';
+  const tnb=document.getElementById('tab-nutri-btn'); if(tnb) tnb.textContent='👩‍⚕️ Nutri'+(hasN?' ●':'');
+}
+
+// ═══════════════════════════════════════════════════════
+// HYDRATION
+// ═══════════════════════════════════════════════════════
+function addHydration(ml) {
+  const today=new Date().toISOString().split('T')[0];
+  D.hydration.push({date:today,ml,time:new Date().toTimeString().slice(0,5)});
+  saveLocal(); updateHydUI();
+}
+function updateHydUI() {
+  const today=new Date().toISOString().split('T')[0];
+  const total=(D.hydration||[]).filter(h=>h.date===today).reduce((s,h)=>s+h.ml,0);
+  const pct=Math.min(100,(total/2000)*100);
+  const c=total>=2000?'#69F0AE':total>=1200?'#FFD740':'#FF4500';
+  const bar=document.getElementById('hyd-bar'); if(bar){bar.style.width=pct+'%';bar.style.background=c;}
+  const dis=document.getElementById('hyd-display'); if(dis){dis.textContent=(total/1000).toFixed(1)+'L / 2,0L';dis.style.color=c;}
+}
+
+// ═══════════════════════════════════════════════════════
+// HOME
+// ═══════════════════════════════════════════════════════
+function renderHomeTrainings() {
+  const el=document.getElementById('home-trainings'); if(!el) return;
+  el.innerHTML=D.trainings.slice(0,4).map((t,i,arr)=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:${i<arr.length-1?'1px solid #1a1a1a':'none'}">
+      <div>
+        <div style="display:flex;gap:5px;margin-bottom:3px;flex-wrap:wrap">
+          <span class="tag" style="color:${TIPO_C[t.type]||'#888'};border-color:${TIPO_C[t.type]||'#888'}44;background:${TIPO_C[t.type]||'#888'}11">${TIPO_L[t.type]||t.type}</span>
+          ${t.gelTest?'<span class="tag" style="color:#CE93D8;border-color:#CE93D844;background:#CE93D811">GEL</span>':''}
+          <span style="font-size:9px;color:#444">${t.date}</span>
+        </div>
+        <div style="font-size:10px;color:#555;max-width:180px">${t.notes||''}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div style="font-family:'Oswald',sans-serif;font-size:18px;font-weight:900;color:#FF4500">${t.dist}km</div>
+        <div style="font-size:10px;color:#666">${t.pace}/km · ${t.fc}bpm</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderScience() {
+  const el=document.getElementById('science-list'); if(!el) return;
+  el.innerHTML=[
+    {icon:"⚡",c:"#FF4500",t:"Pace incorreto",d:"Saída 10s/km rápida = colapso km32–35. GPS + pace fixo."},
+    {icon:"💧",c:"#4FC3F7",t:"Desidratação",d:"Perda >2% peso = queda 10% performance. Meta: 500ml/h."},
+    {icon:"🍌",c:"#69F0AE",t:"Depleção de glicogênio",d:"Reservas duram ~30km. 60–90g carb/h via géis."},
+    {icon:"🧂",c:"#FFD740",t:"Desequilíbrio de sódio",d:"Câimbras. Cápsula de sal a cada 45–60min."},
+  ].map((f,i,arr)=>`
+    <div style="display:flex;gap:10px;padding:8px 0;border-bottom:${i<arr.length-1?'1px solid #1a1a1a':'none'}">
+      <div style="font-size:16px;flex-shrink:0">${f.icon}</div>
+      <div><div style="font-size:11px;font-weight:700;color:${f.c};margin-bottom:2px">${f.t}</div><div style="font-size:11px;color:#777;line-height:1.5">${f.d}</div></div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// STRATEGY
+// ═══════════════════════════════════════════════════════
+function renderStrategy() {
+  document.getElementById('strat-version').textContent='v'+D.strategy.version;
+  document.getElementById('strat-date').textContent=D.strategy.lastUpdated;
+  document.getElementById('strat-goal').textContent=D.strategy.goalTime;
+  document.getElementById('strat-pace').textContent=D.strategy.goalPace+'/km';
+  document.getElementById('strat-notes').textContent=D.strategy.notes;
+  const colors=['#4FC3F7','#69F0AE','#FFD740','#FF7043','#FF4500'];
+  document.getElementById('splits-container').innerHTML=D.strategy.splits.map((s,i)=>`
+    <div class="split-card" style="border-left-color:${colors[i]}">
+      <div class="split-head"><div class="split-trecho" style="color:${colors[i]}">${s.trecho}</div><div><div style="font-size:12px;font-weight:600;text-align:right">${s.pace}/km</div><div style="font-size:10px;color:#666;text-align:right">${s.fc}bpm</div></div></div>
+      <div class="split-dica">${s.dica}</div>
+    </div>`).join('');
+  document.getElementById('checkpoints').innerHTML=[
+    {d:"17/05",e:"Pós-21K Asics — atualizar estratégia"},
+    {d:"25/05",e:"Último longão — confirmar pace definitivo"},
+    {d:"01/06",e:"Verificar clima + estratégia final"},
+    {d:"07/06",e:"🏁 DIA DA PROVA"},
+  ].map((c,i,arr)=>`<div style="display:flex;gap:10px;padding:7px 0;border-bottom:${i<arr.length-1?'1px solid #1a1a1a':'none'}"><div style="font-size:10px;color:#FF4500;font-weight:700;min-width:40px;font-family:'Oswald',sans-serif">${c.d}</div><div style="font-size:11px;color:#777">${c.e}</div></div>`).join('');
+}
+
+function toggleStratEdit() {
+  const el=document.getElementById('strat-edit-form');
+  el.style.display=el.style.display==='none'?'block':'none';
+  if(el.style.display!=='none'){
+    document.getElementById('edit-goal').value=D.strategy.goalTime;
+    document.getElementById('edit-pace').value=D.strategy.goalPace;
+    document.getElementById('edit-notes').value=D.strategy.notes;
+  }
+}
+
+function saveStrategy() {
+  D.strategy.goalTime=document.getElementById('edit-goal').value||D.strategy.goalTime;
+  D.strategy.goalPace=document.getElementById('edit-pace').value||D.strategy.goalPace;
+  D.strategy.notes=document.getElementById('edit-notes').value;
+  D.strategy.version++; D.strategy.lastUpdated=new Date().toISOString().split('T')[0];
+  saveLocal(); renderStrategy();
+  document.getElementById('strat-edit-form').style.display='none';
+  showToast('✓ Estratégia v'+D.strategy.version+' salva!');
+}
+
+// ═══════════════════════════════════════════════════════
+// GELS
+// ═══════════════════════════════════════════════════════
+function renderGels() {
+  document.getElementById('gel-timeline').innerHTML=GELS.map((g,i)=>`
+    <div class="tl-item">
+      <div class="tl-left">
+        <div class="tl-dot" style="color:${g.color};border-color:${g.color}">${g.km}</div>
+        ${i<GELS.length-1?'<div class="tl-line"></div>':''}
+      </div>
+      <div class="tl-content" style="border-color:${g.color}22;border-left-color:${g.color}">
+        <div class="tl-title">${g.item}</div>
+        <div class="tl-tags">
+          <span class="tag" style="color:#69F0AE;border-color:#69F0AE44;background:#69F0AE11">${g.carb}g</span>
+          <span class="tag" style="color:#4FC3F7;border-color:#4FC3F744;background:#4FC3F711">${g.ml}ml</span>
+          ${g.caf?'<span class="tag" style="color:#FF4500;border-color:#FF450044;background:#FF450011">☕ CAF</span>':''}
+          ${g.sal?'<span class="tag" style="color:#FFD740;border-color:#FFD74044;background:#FFD74011">🧂 SAL</span>':''}
+        </div>
+      </div>
+    </div>`).join('');
+  document.getElementById('gel-analysis').innerHTML=[
+    {icon:"✅",c:"#69F0AE",t:"Protocolo tolerado",d:"Sem GI em 24°C. Testado em condição de calor — cenário do Rio."},
+    {icon:"✅",c:"#69F0AE",t:"Energia até km30",d:"Validação do timing. Depleção km30–32 esperada — protocolo termina aí."},
+    {icon:"⚠️",c:"#FF4500",t:"Desidratação foi o fator limitante",d:"Paradas km17/20/25/30 por falta de água. Quebras nos splits coincidem com desidratação, não com falha de carbo."},
+    {icon:"❓",c:"#FFD740",t:"Km30–42 na maratona",d:"Último gel no km30. Faltam 12km (~60min). Reposição km33–35? → Pergunta para a Dra. Fernanda."},
+  ].map((a,i,arr)=>`
+    <div style="display:flex;gap:10px;padding:9px 0;border-bottom:${i<arr.length-1?'1px solid #1a1a1a':'none'}">
+      <div style="font-size:16px;flex-shrink:0">${a.icon}</div>
+      <div><div style="font-size:11px;font-weight:700;color:${a.c};margin-bottom:2px">${a.t}</div><div style="font-size:11px;color:#777;line-height:1.5">${a.d}</div></div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// TRAININGS
+// ═══════════════════════════════════════════════════════
+function toggleAddTraining() {
+  const el=document.getElementById('add-training-form');
+  el.style.display=el.style.display==='none'?'block':'none';
+  if(el.style.display!=='none') document.getElementById('t-date').value=new Date().toISOString().split('T')[0];
+}
+document.getElementById('t-gel').addEventListener('change',function(){
+  document.getElementById('t-gel-area').style.display=this.checked?'block':'none';
+});
+function addTraining() {
+  const dist=document.getElementById('t-dist').value;
+  const pace=document.getElementById('t-pace').value;
+  if(!dist||!pace){alert('Preencha distância e pace');return;}
+  D.trainings.unshift({
+    id:'t'+Date.now(),date:document.getElementById('t-date').value,
+    type:document.getElementById('t-type').value,dist:parseFloat(dist),pace,
+    fc:parseInt(document.getElementById('t-fc').value)||0,
+    tSenso:parseInt(document.getElementById('t-senso').value),
+    notes:document.getElementById('t-notes').value,
+    gelTest:document.getElementById('t-gel').checked,
+    gelNotes:document.getElementById('t-gel-notes').value,
+  });
+  saveLocal(); renderTrainings(); renderHomeTrainings();
+  document.getElementById('add-training-form').style.display='none';
+  ['t-dist','t-pace','t-fc','t-notes','t-gel-notes'].forEach(id=>{document.getElementById(id).value='';});
+  document.getElementById('t-gel').checked=false;
+  document.getElementById('t-gel-area').style.display='none';
+  showToast('✓ Treino salvo!');
+}
+function renderTrainings() {
+  document.getElementById('treinos-count').textContent=D.trainings.length+' TREINOS';
+  document.getElementById('trainings-list').innerHTML=D.trainings.map(t=>`
+    <div class="training-row" style="border-left-color:${TIPO_C[t.type]||'#333'}">
+      <div style="display:flex;justify-content:space-between">
+        <div>
+          <div style="display:flex;gap:5px;margin-bottom:4px;flex-wrap:wrap">
+            <span class="tag" style="color:${TIPO_C[t.type]};border-color:${TIPO_C[t.type]}44;background:${TIPO_C[t.type]}11">${TIPO_L[t.type]||t.type}</span>
+            ${t.gelTest?'<span class="tag" style="color:#CE93D8;border-color:#CE93D844;background:#CE93D811">GEL</span>':''}
+            <span style="font-size:9px;color:#444">${t.date}</span>
+          </div>
+          <div style="font-size:10px;color:#555;max-width:200px">${t.notes||''}</div>
+          ${t.gelTest&&t.gelNotes?`<div style="font-size:9px;color:#CE93D888;margin-top:3px;max-width:200px">💊 ${t.gelNotes.substring(0,50)}...</div>`:''}
+        </div>
+        <div style="flex-shrink:0;text-align:right">
+          <div style="font-family:'Oswald',sans-serif;font-size:18px;font-weight:900;color:#FF4500">${t.dist}km</div>
+          <div style="font-size:10px;color:#666">${t.pace}/km · ${t.fc}bpm</div>
+          <div style="font-size:9px;color:#444">${t.tSenso}/10</div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// WEIGHT
+// ═══════════════════════════════════════════════════════
+function addWeight() {
+  const kg=document.getElementById('new-kg').value;
+  const date=document.getElementById('new-kg-date').value;
+  if(!kg||!date) return;
+  D.weights.push({date,kg:parseFloat(kg)});
+  saveLocal(); renderWeightChart(); updateWeightDisplay();
+  document.getElementById('new-kg').value='';
+  showToast('✓ Peso salvo!');
+}
+function updateWeightDisplay() {
+  const sorted=[...D.weights].sort((a,b)=>b.date.localeCompare(a.date));
+  const last=sorted[0]; const first=[...D.weights].sort((a,b)=>a.date.localeCompare(b.date))[0];
+  if(last){
+    document.getElementById('peso-atual').innerHTML=last.kg+'<span style="font-size:11px;color:#555">kg</span>';
+    document.getElementById('peso-data').textContent=last.date;
+  }
+  if(last&&first&&last!==first){
+    const diff=(last.kg-first.kg).toFixed(1);
+    const el=document.getElementById('peso-diff');
+    el.innerHTML=(parseFloat(diff)>0?'+':'')+diff+'<span style="font-size:11px;color:#555">kg</span>';
+    el.style.color=parseFloat(diff)<0?'#69F0AE':'#FF4500';
+  }
+}
+function renderWeightChart() {
+  const el=document.getElementById('weight-chart'); const histEl=document.getElementById('weight-history');
+  if(!el) return;
+  const sorted=[...D.weights].sort((a,b)=>a.date.localeCompare(b.date));
+  if(!sorted.length) return;
+  const maxKg=Math.max(...sorted.map(w=>w.kg));
+  const minKg=Math.min(...sorted.map(w=>w.kg));
+  const range=maxKg-minKg||1;
+  el.innerHTML=sorted.map((w,i)=>{
+    const h=10+((w.kg-minKg)/range)*55;
+    const isLast=i===sorted.length-1;
+    return `<div class="w-bar-wrap"><div style="font-size:9px;color:${isLast?'#4FC3F7':'#555'}">${w.kg}</div><div class="w-bar" style="height:${h}px;background:${isLast?'#4FC3F7':'#2a2a2a'}"></div><div class="w-bar-date">${w.date.slice(5)}</div></div>`;
+  }).join('');
+  if(histEl) histEl.innerHTML='<div style="margin-top:10px">'+[...sorted].reverse().map((w,i,arr)=>`<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:${i<arr.length-1?'1px solid #1a1a1a':'none'}"><div style="font-size:11px;color:#777">${w.date}</div><div style="font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;color:#4FC3F7">${w.kg}kg</div></div>`).join('')+'</div>';
+}
+
+// ═══════════════════════════════════════════════════════
+// WEATHER
+// ═══════════════════════════════════════════════════════
+function loadWeather() {
+  fetch('https://api.open-meteo.com/v1/forecast?latitude=-22.9068&longitude=-43.1729&current=temperature_2m,windspeed_10m&timezone=America%2FSao_Paulo&forecast_days=1')
+    .then(r=>r.json()).then(d=>{
+      const cur=d.current?.temperature_2m; const wind=d.current?.windspeed_10m;
+      if(cur===undefined) return;
+      document.getElementById('wc-text').textContent=`${cur}°C · ${wind}km/h`;
+      const impact=cur>=26?{l:'CRÍTICO',c:'#FF4500'}:cur>=22?{l:'QUENTE',c:'#FFD740'}:{l:'IDEAL',c:'#69F0AE'};
+      document.getElementById('wc-tag').innerHTML=`<span class="tag" style="color:${impact.c};border-color:${impact.c}44;background:${impact.c}11">${impact.l}</span>`;
+      document.getElementById('clima-cur').textContent=cur+'°C';
+      document.getElementById('clima-wind').textContent='Vento '+wind+'km/h';
+      const fi=cur>=26?{l:'CRÍTICO',c:'#FF4500',t:'+20s/km. Sal extra. Hidrogel antecipado.'}:cur>=22?{l:'QUENTE',c:'#FFD740',t:'+10s/km. Molhe cabeça em todo posto.'}:{l:'IDEAL',c:'#69F0AE',t:'Condições favoráveis. Estratégia original.'};
+      const ci=document.getElementById('clima-impact');
+      ci.style.background=fi.c+'12'; ci.style.borderLeftColor=fi.c;
+      document.getElementById('clima-impact-title').textContent='IMPACTO: '+fi.l;
+      document.getElementById('clima-impact-title').style.color=fi.c;
+      document.getElementById('clima-impact-text').textContent=fi.t;
+    }).catch(()=>{ document.getElementById('wc-text').textContent='Histórico Jun/Rio: 22–28°C'; });
+}
+
+// ═══════════════════════════════════════════════════════
+// NUTRI
+// ═══════════════════════════════════════════════════════
+function renderNutriForm() {
+  document.getElementById('nutri-questions').innerHTML=NUTRI_Q.map(q=>`
+    <div class="nutri-q">
+      <div class="nutri-q-label">${q.label}</div>
+      <div class="nutri-q-text">${q.text}</div>
+      <textarea class="nutri-textarea" id="nq-${q.id}" rows="${q.id==='q6'?4:3}" placeholder="Sua recomendação aqui...">${D.nutriNotes[q.id]||''}</textarea>
+    </div>`).join('');
+  if(D.nutriNotes.lastUpdated) document.getElementById('nutri-last-update').textContent='Última atualização: '+D.nutriNotes.lastUpdated;
+  renderNutriSaved();
+}
+
+async function saveNutri() {
+  const spinner=document.getElementById('save-nutri-spinner');
+  if(spinner) spinner.style.display='inline-block';
+  NUTRI_Q.forEach(q=>{ D.nutriNotes[q.id]=document.getElementById('nq-'+q.id)?.value||''; });
+  D.nutriNotes.lastUpdated=new Date().toISOString().split('T')[0];
+  saveLocal();
+
+  let msg='✓ Salvo localmente';
+  if(scriptUrl) {
+    const ok=await sendToSheets(D.nutriNotes);
+    msg=ok?'✓ Salvo e enviado para o Google Sheets!':'✓ Salvo localmente (falha no envio ao Sheets)';
+    if(ok) D.nutriNotes.syncedAt=new Date().toISOString();
+  }
+
+  if(spinner) spinner.style.display='none';
+  const msgEl=document.getElementById('nutri-saved-msg');
+  msgEl.textContent=msg; msgEl.style.display='block';
+  setTimeout(()=>msgEl.style.display='none',4000);
+  document.getElementById('nutri-last-update').textContent='Última atualização: '+D.nutriNotes.lastUpdated;
+  renderNutriSaved(); updateNutriRecs(); updateHeaderStatus();
+}
+
+function copyNutri() {
+  let text='=== RECOMENDAÇÕES · DRA. FERNANDA MICELLI CRN3 83.511 ===\n';
+  text+=`Atleta: Adriano Ortolani · Maratona Rio 07/06/2026\nData: ${new Date().toLocaleDateString('pt-BR')}\n\n`;
+  NUTRI_Q.forEach(q=>{ const v=D.nutriNotes[q.id]; if(v) text+=`── ${q.label} ──\n${v}\n\n`; });
+  if(navigator.clipboard) navigator.clipboard.writeText(text).then(()=>alert('✓ Copiado! Cole no WhatsApp para o Adriano.'));
+  else { const ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); alert('✓ Copiado!'); }
+}
+
+function renderNutriSaved() {
+  const hasAny=NUTRI_Q.some(q=>D.nutriNotes[q.id]);
+  document.getElementById('nutri-saved-section').style.display=hasAny?'block':'none';
+  if(hasAny) document.getElementById('nutri-saved-list').innerHTML=NUTRI_Q.filter(q=>D.nutriNotes[q.id]).map(q=>`<div class="nutri-saved-item"><div style="font-size:9px;color:#69F0AE;font-weight:700;margin-bottom:4px">${q.label}</div><div style="font-size:12px;color:#bbb;line-height:1.6;white-space:pre-wrap">${D.nutriNotes[q.id]}</div></div>`).join('');
+}
+
+function updateNutriRecs() {
+  const gelRec=document.getElementById('nutri-gel-rec');
+  if(gelRec&&D.nutriNotes.q1){gelRec.style.display='block';document.getElementById('nutri-gel-rec-text').textContent=D.nutriNotes.q1;}
+  const corpoRec=document.getElementById('nutri-corpo-rec');
+  if(corpoRec&&D.nutriNotes.q3){corpoRec.style.display='block';document.getElementById('nutri-corpo-rec-text').textContent=D.nutriNotes.q3;}
+}
+
+// ═══════════════════════════════════════════════════════
+// CONFIG PANEL
+// ═══════════════════════════════════════════════════════
+function renderSetupSteps() {
+  const el=document.getElementById('setup-steps-inline'); if(!el) return;
+  el.innerHTML=`
+    <div style="display:flex;gap:10px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #1a1a1a">
+      <div style="width:24px;height:24px;border-radius:50%;background:#FF4500;color:#000;font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
+      <div style="font-size:11px;color:#bbb;line-height:1.6"><strong style="color:#fff">Crie uma planilha Google</strong><br>Acesse <a href="https://sheets.new" target="_blank" style="color:#69F0AE">sheets.new</a> → planilha em branco → copie o ID da URL</div>
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #1a1a1a">
+      <div style="width:24px;height:24px;border-radius:50%;background:#FF4500;color:#000;font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>
+      <div style="font-size:11px;color:#bbb;line-height:1.6"><strong style="color:#fff">Apps Script</strong><br>Na planilha → Extensões → Apps Script → cole o código do arquivo <span style="color:#FF4500;font-family:monospace">apps-script.js</span> → substitua o ID → salve</div>
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #1a1a1a">
+      <div style="width:24px;height:24px;border-radius:50%;background:#FF4500;color:#000;font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>
+      <div style="font-size:11px;color:#bbb;line-height:1.6"><strong style="color:#fff">Implantar como Web App</strong><br>Implantar → Nova implantação → App da Web → "Qualquer pessoa" → Implantar → copie a URL</div>
+    </div>
+    <div style="display:flex;gap:10px">
+      <div style="width:24px;height:24px;border-radius:50%;background:#FF4500;color:#000;font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">4</div>
+      <div style="font-size:11px;color:#bbb;line-height:1.6"><strong style="color:#fff">Cole a URL na aba ⚙️ Config</strong><br>Clique em "Salvar URL" → "Testar conexão" → pronto!</div>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+// SETUP MODAL
+// ═══════════════════════════════════════════════════════
+function saveSetup() {
+  const url=document.getElementById('setup-url').value.trim();
+  if(url){scriptUrl=url;localStorage.setItem(SCRIPT_URL_KEY,url);}
+  document.getElementById('setup-modal').style.display='none';
+  updateSyncUI(!!url);
+}
+function skipSetup() { document.getElementById('setup-modal').style.display='none'; }
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+document.getElementById('new-kg-date').value=new Date().toISOString().split('T')[0];
+document.getElementById('t-date').value=new Date().toISOString().split('T')[0];
+
+renderHomeTrainings(); renderScience(); renderStrategy();
+renderGels(); renderTrainings(); renderWeightChart();
+updateWeightDisplay(); updateHydUI(); updateHeaderStatus();
+renderNutriForm(); updateNutriRecs(); renderSetupSteps();
+loadWeather(); updateSyncUI(false);
+
+// Mostrar setup modal se não tiver URL configurada (primeira vez)
+if(!scriptUrl && !localStorage.getItem('adriano-setup-done')) {
+  // Não mostrar modal automaticamente — deixar o usuário ir em ⚙️ Config
+  localStorage.setItem('adriano-setup-done','1');
+}
+
+// Se tiver URL, fazer sync inicial
+if(scriptUrl) setTimeout(syncNow, 2000);
+
+// Auto-save nutri a cada 60s
+setInterval(()=>{
+  const hasInput=NUTRI_Q.some(q=>document.getElementById('nq-'+q.id)?.value);
+  if(hasInput){
+    NUTRI_Q.forEach(q=>{D.nutriNotes[q.id]=document.getElementById('nq-'+q.id)?.value||'';});
+    D.nutriNotes.lastUpdated=new Date().toISOString().split('T')[0];
+    saveLocal();
+  }
+},60000);
+</script>
+</body>
+</html>
