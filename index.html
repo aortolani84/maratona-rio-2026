@@ -250,6 +250,8 @@ input[type=range]{width:100%;accent-color:var(--orange);margin-bottom:10px}
   </div>
   <div class="tabs">
     <button class="tab-btn active" onclick="showTab('home',this)">🏠 Home</button>
+    <button class="tab-btn" onclick="showTab('semana',this)">📅 Semana</button>
+    <button class="tab-btn" onclick="showTab('asics',this)">🏁 Asics</button>
     <button class="tab-btn" onclick="showTab('estrategia',this)">🧠 Estratégia</button>
     <button class="tab-btn" onclick="showTab('geis',this)">💊 Géis</button>
     <button class="tab-btn" onclick="showTab('corpo',this)">⚖️ Corpo</button>
@@ -301,6 +303,14 @@ input[type=range]{width:100%;accent-color:var(--orange);margin-bottom:10px}
         <button class="hyd-btn" style="color:#4FC3F7;border-color:rgba(79,195,247,.3)" onclick="addHydration(500)">+500ml</button>
         <button class="hyd-btn" style="color:#4FC3F7;border-color:rgba(79,195,247,.3)" onclick="addHydration(750)">+750ml</button>
       </div>
+      <div style="display:flex;gap:6px;margin-top:6px">
+        <button onclick="undoHydration()" style="flex:1;background:transparent;border:1px solid #FFD74044;border-radius:6px;padding:6px;cursor:pointer;color:#FFD740;font-size:10px;font-weight:700;font-family:inherit">↩️ Desfazer</button>
+        <button onclick="resetTodayHydration()" style="flex:1;background:transparent;border:1px solid #FF450033;border-radius:6px;padding:6px;cursor:pointer;color:#FF4500;font-size:10px;font-weight:700;font-family:inherit">🗑️ Zerar dia</button>
+      </div>
+      <div style="margin-top:10px">
+        <div style="font-size:9px;color:#555;margin-bottom:6px;letter-spacing:.1em">SEMANA · CONSUMO DIÁRIO</div>
+        <div id="hyd-week-chart"></div>
+      </div>
     </div>
 
     <div class="card" style="border-color:rgba(255,69,0,.2)">
@@ -312,8 +322,8 @@ input[type=range]{width:100%;accent-color:var(--orange);margin-bottom:10px}
         </div>
         <div style="text-align:right">
           <div style="font-size:9px;color:#69F0AE">STRAVA PREVÊ</div>
-          <div style="font-family:'Oswald',sans-serif;font-size:22px;font-weight:900;color:#69F0AE">3:34:41</div>
-          <div style="font-size:9px;color:#555">5:05/km</div>
+          <div style="font-family:'Oswald',sans-serif;font-size:22px;font-weight:900;color:#69F0AE">3:38:53</div>
+          <div style="font-size:9px;color:#555">5:11/km</div>
         </div>
       </div>
     </div>
@@ -527,6 +537,14 @@ input[type=range]{width:100%;accent-color:var(--orange);margin-bottom:10px}
       <div id="clima-impact-title" style="font-size:10px;font-weight:700;margin-bottom:3px;color:#FF4500">Buscando clima...</div>
       <div id="clima-impact-text" style="font-size:11px;color:#aaa"></div>
     </div>
+    <div class="card-grid-2" style="margin-bottom:12px">
+      <div class="card" style="padding:12px">
+        <div id="sp-forecast"><div style="font-size:11px;color:#555">Buscando SP...</div></div>
+      </div>
+      <div class="card" style="padding:12px">
+        <div id="rj-forecast"><div style="font-size:11px;color:#555">Buscando RJ...</div></div>
+      </div>
+    </div>
     <div class="seclabel">PLANO POR TEMPERATURA</div>
     <div class="card">
       <div class="temp-row"><span class="tag" style="color:#69F0AE;border-color:rgba(105,240,174,.3);background:rgba(105,240,174,.1);min-width:52px;text-align:center">≤18°C</span><div style="flex:1;padding-left:10px"><div style="font-size:11px;font-weight:600">5:05–5:10/km</div><div style="font-size:10px;color:#666">Ideal. Pode apertar no km 35.</div></div></div>
@@ -588,6 +606,112 @@ input[type=range]{width:100%;accent-color:var(--orange);margin-bottom:10px}
         <div class="seclabel" style="color:#69F0AE">RECOMENDAÇÕES SALVAS</div>
         <div id="nutri-saved-list"></div>
       </div>
+    </div>
+  </div>
+
+  <!-- SEMANA -->
+  <div id="panel-semana" class="panel">
+    <div class="seclabel">📅 SEMANA ATUAL · PLANILHA RUNFUN · 75% CONCLUÍDA</div>
+    <div style="background:#111;border:1px solid #1f1f1f;border-radius:10px;overflow:hidden;margin-bottom:14px">
+      <div style="background:#001a33;padding:10px 14px;display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:11px;color:#4FC3F7;font-weight:700">PROGRESSO DA PLANILHA</div>
+        <div style="font-size:18px;font-weight:900;color:#4FC3F7;font-family:'Oswald',sans-serif">75%</div>
+      </div>
+      <div style="height:4px;background:#1a1a1a"><div style="width:75%;height:100%;background:#4FC3F7"></div></div>
+    </div>
+
+    <div id="week-plan-list"></div>
+
+    <div class="card" style="border-color:rgba(255,69,0,.2);margin-top:14px">
+      <div class="seclabel" style="color:#FF4500">⚡ PREVISÕES STRAVA · HOJE</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="text-align:center;padding:10px;background:#0a0a0a;border-radius:8px">
+          <div style="font-size:9px;color:#555">5K</div>
+          <div style="font-family:'Oswald',sans-serif;font-size:20px;font-weight:900;color:#4FC3F7">21:09</div>
+          <div style="font-size:9px;color:#555">4:14/km ▼18s</div>
+        </div>
+        <div style="text-align:center;padding:10px;background:#0a0a0a;border-radius:8px">
+          <div style="font-size:9px;color:#555">10K</div>
+          <div style="font-family:'Oswald',sans-serif;font-size:20px;font-weight:900;color:#4FC3F7">44:03</div>
+          <div style="font-size:9px;color:#555">4:24/km ▼21s</div>
+        </div>
+        <div style="text-align:center;padding:10px;background:#0a0a0a;border-radius:8px">
+          <div style="font-size:9px;color:#555">MEIA</div>
+          <div style="font-family:'Oswald',sans-serif;font-size:20px;font-weight:900;color:#69F0AE">1:37:07</div>
+          <div style="font-size:9px;color:#555">4:36/km ▼3min</div>
+        </div>
+        <div style="text-align:center;padding:10px;background:#FF450011;border:1px solid #FF450033;border-radius:8px">
+          <div style="font-size:9px;color:#FF4500">MARATONA</div>
+          <div style="font-family:'Oswald',sans-serif;font-size:20px;font-weight:900;color:#FF4500">3:38:53</div>
+          <div style="font-size:9px;color:#FF4500">5:11/km ▼10min58s</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASICS 21K -->
+  <div id="panel-asics" class="panel">
+    <div style="background:linear-gradient(135deg,#001208,#0a0a0a);border:2px solid rgba(105,240,174,.3);border-radius:12px;padding:16px;margin-bottom:14px">
+      <div style="font-size:9px;color:#69F0AE;letter-spacing:.15em;margin-bottom:6px">🏁 21K ASICS · 17/05/2026 · DOMINGO</div>
+      <div style="font-family:'Oswald',sans-serif;font-size:24px;font-weight:900;color:#69F0AE;margin-bottom:4px">ESTRATÉGIA DE PROVA</div>
+      <div style="font-size:11px;color:#4a7a5a">Prova teste para a Maratona do Rio · Use como laboratório real</div>
+    </div>
+
+    <div class="card" style="border-color:rgba(105,240,174,.2);margin-bottom:12px">
+      <div class="seclabel" style="color:#69F0AE">🎯 OBJETIVOS DO 21K ASICS</div>
+      <div style="display:flex;gap:16px;margin-bottom:10px">
+        <div><div style="font-size:9px;color:#555">TEMPO ALVO</div><div style="font-family:'Oswald',sans-serif;font-size:24px;font-weight:900;color:#69F0AE">1:37–1:42</div></div>
+        <div><div style="font-size:9px;color:#555">PACE ALVO</div><div style="font-family:'Oswald',sans-serif;font-size:18px;font-weight:700;color:#FFD740">4:36–4:50/km</div></div>
+      </div>
+      <div style="font-size:11px;color:#777;line-height:1.6">Strava prevê 1:37:07 em condições ideais. Meta conservadora: 1:40 para testar o protocolo de géis com segurança e chegar inteiro para a maratona.</div>
+    </div>
+
+    <div class="card" style="margin-bottom:12px">
+      <div class="seclabel" style="color:#FFD740">⚡ ESTRATÉGIA DE CORRIDA</div>
+      <div style="border-left:4px solid #4FC3F7;padding:10px 12px;background:#0a0a0a;border-radius:0 6px 6px 0;margin-bottom:8px">
+        <div style="font-size:12px;font-weight:700;color:#4FC3F7;margin-bottom:3px">0–5km · Saída</div>
+        <div style="font-size:11px;color:#888">4:50–5:00/km · FC 155–165bpm · Conservador. Deixa o pelotão ir.</div>
+      </div>
+      <div style="border-left:4px solid #69F0AE;padding:10px 12px;background:#0a0a0a;border-radius:0 6px 6px 0;margin-bottom:8px">
+        <div style="font-size:12px;font-weight:700;color:#69F0AE;margin-bottom:3px">5–15km · Desenvolvimento</div>
+        <div style="font-size:11px;color:#888">4:40–4:50/km · FC 165–175bpm · Ritmo de prova. Gel no km 7.</div>
+      </div>
+      <div style="border-left:4px solid #FFD740;padding:10px 12px;background:#0a0a0a;border-radius:0 6px 6px 0;margin-bottom:8px">
+        <div style="font-size:12px;font-weight:700;color:#FFD740;margin-bottom:3px">15–18km · Manutenção</div>
+        <div style="font-size:11px;color:#888">4:45–4:55/km · FC 170–178bpm · Gel km 14. Mantenha cadência.</div>
+      </div>
+      <div style="border-left:4px solid #FF4500;padding:10px 12px;background:#0a0a0a;border-radius:0 6px 6px 0">
+        <div style="font-size:12px;font-weight:700;color:#FF4500;margin-bottom:3px">18–21km · Final</div>
+        <div style="font-size:11px;color:#888">4:36–4:45/km · FC até 183bpm · Larga tudo nos últimos 3km.</div>
+      </div>
+    </div>
+
+    <div class="card" style="border-color:rgba(206,147,216,.2);margin-bottom:12px">
+      <div class="seclabel" style="color:#CE93D8">💊 PROTOCOLO DE GÉIS · 21K (~1h40)</div>
+      <div style="display:flex;gap:10px;margin-bottom:8px;padding:8px 0;border-bottom:1px solid #1a1a1a">
+        <div style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:#CE93D8;min-width:30px">PRÉ</div>
+        <div style="font-size:11px;color:#bbb">Hidrogel duplo s/caf + 400mg cafeína + 2 bananas + mel</div>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:8px;padding:8px 0;border-bottom:1px solid #1a1a1a">
+        <div style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:#69F0AE;min-width:30px">7K</div>
+        <div style="font-size:11px;color:#bbb">Gel Z2 Lemon · 25g carb + água no posto</div>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:8px;padding:8px 0;border-bottom:1px solid #1a1a1a">
+        <div style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:#FFD740;min-width:30px">14K</div>
+        <div style="font-size:11px;color:#bbb">Hidrogel duplo + Cápsula Sal · 25g carb</div>
+      </div>
+      <div style="display:flex;gap:10px;padding:8px 0">
+        <div style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:#FF7043;min-width:30px">18K</div>
+        <div style="font-size:11px;color:#bbb">Gel Z2 Double Espresso ☕ · boost final</div>
+      </div>
+      <div style="margin-top:10px;padding:8px 10px;background:#0a1a0e;border-radius:6px;font-size:10px;color:#69F0AE">
+        ⚠️ Protocolo sugerido — aguardando confirmação da Dra. Fernanda na aba 👩‍⚕️ Nutri
+      </div>
+    </div>
+
+    <div class="card" style="border-color:rgba(255,69,0,.2)">
+      <div class="seclabel" style="color:#FF4500">🔗 CONEXÃO COM A MARATONA DO RIO</div>
+      <div id="asics-connections"></div>
     </div>
   </div>
 
@@ -658,6 +782,7 @@ const DEFAULT = {
   ],
   hydration:[],
   trainings:[
+    {id:"t6",date:"2026-05-10",type:"regenerativo",dist:13.33,pace:"5:20",fc:147,tSenso:4,notes:"Regenerativo · SP · Strava: corrida bem executada, ritmo Z2 estável",gelTest:false},
     {id:"t1",date:"2026-05-02",type:"longao",dist:30,pace:"5:05",fc:169,tSenso:8,notes:"3º melhor 30K · com Vinnie P",gelTest:false},
     {id:"t2",date:"2026-05-04",type:"moderado",dist:14,pace:"5:11",fc:151,tSenso:4,notes:"Regenerativo controlado",gelTest:false},
     {id:"t3",date:"2026-05-05",type:"intervalado",dist:14.6,pace:"4:48",fc:169,tSenso:8,notes:"3×3000m Mode Hard · com Rodrigo G",gelTest:false},
@@ -675,6 +800,13 @@ const DEFAULT = {
       {trecho:"35–42km",pace:"5:10–5:20",fc:"183–188",dica:"Larga tudo. FC máx 188. Final no Aterro."},
     ]
   },
+  weekPlan:[
+    {date:"2026-05-10",done:true,type:"regenerativo",desc:"Regenerativo 13km · 5:20/km · Executado ✅"},
+    {date:"2026-05-12",done:false,type:"intervalado",desc:"Intervalado · 4×1km ZT 3:54–4:11 + aquec/desac 30min"},
+    {date:"2026-05-14",done:false,type:"tempo",desc:"Ritmo Maratona · 8km a 4:43–4:55/km + aquec/desac"},
+    {date:"2026-05-16",done:false,type:"moderado",desc:"~13km ritmo maratona (leve — véspera da Asics)"},
+    {date:"2026-05-17",done:false,type:"prova",desc:"🏁 21K ASICS · PROVA"},
+  ],
   nutriNotes:{q1:"",q2:"",q3:"",q4:"",q5:"",q6:"",lastUpdated:"",syncedAt:""},
 };
 
@@ -876,6 +1008,9 @@ function showTab(id, btn) {
   if(btn) btn.classList.add('active');
   if(id==='treinos') renderTrainings();
   if(id==='corpo') renderWeightChart();
+  if(id==='semana') { renderWeekPlan(); hydrationWeekChart(); }
+  if(id==='asics') renderAsicsConnections();
+  if(id==='clima') { loadWeatherSP(); loadWeatherRJ(); }
 }
 
 // ═══════════════════════════════════════════════════════
@@ -908,6 +1043,15 @@ function updateHydUI() {
   const c=total>=3000?'#69F0AE':total>=1800?'#FFD740':'#FF4500';
   const bar=document.getElementById('hyd-bar'); if(bar){bar.style.width=pct+'%';bar.style.background=c;}
   const dis=document.getElementById('hyd-display'); if(dis){dis.textContent=(total/1000).toFixed(1)+'L / 3,0L';dis.style.color=c;}
+  hydrationWeekChart();
+}
+
+function resetTodayHydration() {
+  if(!confirm('Zerar hidratação de hoje?')) return;
+  const today=new Date().toISOString().split('T')[0];
+  D.hydration=D.hydration.filter(h=>h.date!==today);
+  saveLocal(); updateHydUI();
+  showToast('🗑️ Hidratação de hoje zerada','#000','#FF4500');
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1120,23 +1264,162 @@ function renderWeightChart() {
 // ═══════════════════════════════════════════════════════
 // WEATHER
 // ═══════════════════════════════════════════════════════
-function loadWeather() {
-  fetch('https://api.open-meteo.com/v1/forecast?latitude=-22.9068&longitude=-43.1729&current=temperature_2m,windspeed_10m&timezone=America%2FSao_Paulo&forecast_days=1')
+// ═══════════════════════════════════════════════════════
+// CLIMA SP + RJ
+// ═══════════════════════════════════════════════════════
+function loadWeatherSP() {
+  // SP coords
+  fetch('https://api.open-meteo.com/v1/forecast?latitude=-23.5505&longitude=-46.6333&current=temperature_2m,windspeed_10m,weathercode&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=America%2FSao_Paulo&forecast_days=7')
     .then(r=>r.json()).then(d=>{
-      const cur=d.current?.temperature_2m; const wind=d.current?.windspeed_10m;
-      if(cur===undefined) return;
-      document.getElementById('wc-text').textContent=`${cur}°C · ${wind}km/h`;
-      const impact=cur>=26?{l:'CRÍTICO',c:'#FF4500'}:cur>=22?{l:'QUENTE',c:'#FFD740'}:{l:'IDEAL',c:'#69F0AE'};
-      document.getElementById('wc-tag').innerHTML=`<span class="tag" style="color:${impact.c};border-color:${impact.c}44;background:${impact.c}11">${impact.l}</span>`;
+      const cur=d.current?.temperature_2m;
+      const wind=d.current?.windspeed_10m;
+      // Update header status SP
+      const spEl=document.getElementById('wc-text');
+      if(spEl) spEl.textContent=`SP: ${cur}°C · ${wind}km/h`;
+      // Render forecast SP
+      renderForecast('sp-forecast', d, 'SÃO PAULO');
+    }).catch(()=>{});
+}
+
+function loadWeatherRJ() {
+  fetch('https://api.open-meteo.com/v1/forecast?latitude=-22.9068&longitude=-43.1729&current=temperature_2m,windspeed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=America%2FSao_Paulo&forecast_days=7')
+    .then(r=>r.json()).then(d=>{
+      const cur=d.current?.temperature_2m;
+      const wind=d.current?.windspeed_10m;
       document.getElementById('clima-cur').textContent=cur+'°C';
       document.getElementById('clima-wind').textContent='Vento '+wind+'km/h';
-      const fi=cur>=26?{l:'CRÍTICO',c:'#FF4500',t:'+20s/km. Sal extra. Hidrogel antecipado.'}:cur>=22?{l:'QUENTE',c:'#FFD740',t:'+10s/km. Molhe cabeça em todo posto.'}:{l:'IDEAL',c:'#69F0AE',t:'Condições favoráveis. Estratégia original.'};
+      const fi=cur>=26?{l:'CRÍTICO',c:'#FF4500',t:'+20s/km. Sal extra. Priorize chegar.'}:cur>=22?{l:'QUENTE',c:'#FFD740',t:'+10s/km. Molhe cabeça em todo posto.'}:{l:'IDEAL',c:'#69F0AE',t:'Condições favoráveis. Estratégia original.'};
       const ci=document.getElementById('clima-impact');
-      ci.style.background=fi.c+'12'; ci.style.borderLeftColor=fi.c;
-      document.getElementById('clima-impact-title').textContent='IMPACTO: '+fi.l;
-      document.getElementById('clima-impact-title').style.color=fi.c;
-      document.getElementById('clima-impact-text').textContent=fi.t;
-    }).catch(()=>{ document.getElementById('wc-text').textContent='Histórico Jun/Rio: 22–28°C'; });
+      if(ci){ci.style.background=fi.c+'12';ci.style.borderLeftColor=fi.c;}
+      const ct=document.getElementById('clima-impact-title'); if(ct){ct.textContent='IMPACTO: '+fi.l;ct.style.color=fi.c;}
+      const cx=document.getElementById('clima-impact-text'); if(cx) cx.textContent=fi.t;
+      // Tag compacta header
+      const wt=document.getElementById('wc-tag'); if(wt){const impact=cur>=26?{l:'CRÍTICO',c:'#FF4500'}:cur>=22?{l:'QUENTE',c:'#FFD740'}:{l:'IDEAL',c:'#69F0AE'}; wt.innerHTML=`<span class="tag" style="color:${impact.c};border-color:${impact.c}44;background:${impact.c}11">${impact.l}</span>`;}
+      renderForecast('rj-forecast', d, 'RIO DE JANEIRO');
+    }).catch(()=>{});
+}
+
+const WEATHER_ICONS = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌦️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️'};
+
+function renderForecast(elId, data, city) {
+  const el=document.getElementById(elId); if(!el) return;
+  const days=data.daily;
+  const today=new Date().toISOString().split('T')[0];
+  el.innerHTML='<div style="font-size:9px;color:#555;margin-bottom:8px;letter-spacing:.1em">'+city+'</div>'+
+    days.time.slice(0,7).map((date,i)=>{
+      const d=new Date(date);
+      const dayName=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'][d.getDay()];
+      const isToday=date===today;
+      const isRaceDay=date==='2026-06-07';
+      const tmax=days.temperature_2m_max[i];
+      const tmin=days.temperature_2m_min[i];
+      const rain=days.precipitation_probability_max[i];
+      const icon=WEATHER_ICONS[data.daily.weathercode?.[i]]||'🌡️';
+      const c=isRaceDay?'#FF4500':isToday?'#4FC3F7':'#555';
+      return `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #1a1a1a">
+        <div style="min-width:32px;font-size:10px;font-weight:${isToday||isRaceDay?700:400};color:${c}">${isToday?'Hoje':isRaceDay?'🏁':dayName}</div>
+        <div style="font-size:16px">${icon}</div>
+        <div style="flex:1">
+          <div style="font-size:11px;font-weight:600;color:${c}">${tmax}° / ${tmin}°</div>
+          <div style="font-size:9px;color:#555">💧${rain}% chuva</div>
+        </div>
+        ${isRaceDay?'<span style="font-size:9px;background:#FF450022;color:#FF4500;padding:2px 6px;border-radius:4px;border:1px solid #FF450044">MARATONA</span>':''}
+        ${isToday?'<span style="font-size:9px;background:#4FC3F722;color:#4FC3F7;padding:2px 6px;border-radius:4px;border:1px solid #4FC3F744">HOJE</span>':''}
+      </div>`;
+    }).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// SEMANA
+// ═══════════════════════════════════════════════════════
+function renderWeekPlan() {
+  const el=document.getElementById('week-plan-list'); if(!el) return;
+  const TIPO_WEEK={longao:"Longão",moderado:"Moderado",intervalado:"Intervalado",tempo:"Tempo Run",regenerativo:"Regenerativo",prova:"PROVA"};
+  const TIPO_WEEK_C={longao:"#FF4500",moderado:"#4FC3F7",intervalado:"#FF7043",tempo:"#FFD740",regenerativo:"#69F0AE",prova:"#CE93D8"};
+  const plan=D.weekPlan||[];
+  const today=new Date().toISOString().split('T')[0];
+  el.innerHTML=plan.map(t=>{
+    const isToday=t.date===today;
+    const isPast=t.date<today;
+    const c=TIPO_WEEK_C[t.type]||'#888';
+    return `<div style="display:flex;gap:12px;padding:10px 12px;margin-bottom:6px;background:${isToday?'#0a1a00':'#0e0e0e'};border-left:3px solid ${t.done||isPast?c+'88':isToday?c:'#333'};border-radius:0 8px 8px 0;border:1px solid ${isToday?c+'33':'#1f1f1f'};border-left-width:3px">
+      <div style="flex:1">
+        <div style="display:flex;gap:6px;align-items:center;margin-bottom:3px;flex-wrap:wrap">
+          <span style="font-size:9px;font-weight:700;color:#555">${t.date.slice(5).replace('-','/')}</span>
+          <span class="tag" style="color:${c};border-color:${c}44;background:${c}11">${TIPO_WEEK[t.type]||t.type}</span>
+          ${isToday?'<span class="tag" style="color:#69F0AE;border-color:#69F0AE44;background:#69F0AE11">HOJE</span>':''}
+          ${t.done?'<span class="tag" style="color:#69F0AE;border-color:#69F0AE44;background:#69F0AE11">✅ FEITO</span>':''}
+        </div>
+        <div style="font-size:11px;color:#888;line-height:1.5">${t.desc}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// ASICS CONNECTIONS
+// ═══════════════════════════════════════════════════════
+function renderAsicsConnections() {
+  const el=document.getElementById('asics-connections'); if(!el) return;
+  el.innerHTML=[
+    {icon:"🧪",c:"#CE93D8",t:"Validar protocolo de géis",d:"Primeiro teste em condições reais com postos organizados. Resultado alimenta a estratégia do Rio."},
+    {icon:"📊",c:"#4FC3F7",t:"Calibrar pace alvo da maratona",d:"Se fechar entre 1:37–1:40, confirma que 3:38–3:45 no Rio é realista. Abaixo de 1:37, pode apertar o objetivo."},
+    {icon:"❤️",c:"#FF4500",t:"Testar FC em ritmo de prova",d:"Monitorar FC no km 15–21. Se estiver acima de 178bpm, ritmo de maratona deve ser revisto."},
+    {icon:"🌡️",c:"#FFD740",t:"Aclimatação ao calor",d:"Domingo pode estar quente em SP. Treino de calor antes do Rio — experiência valiosa."},
+  ].map((a,i,arr)=>`
+    <div style="display:flex;gap:10px;padding:8px 0;border-bottom:${i<arr.length-1?'1px solid #1a1a1a':'none'}">
+      <div style="font-size:18px;flex-shrink:0">${a.icon}</div>
+      <div><div style="font-size:11px;font-weight:700;color:${a.c};margin-bottom:2px">${a.t}</div><div style="font-size:11px;color:#777;line-height:1.5">${a.d}</div></div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// HIDRATAÇÃO MELHORADA
+// ═══════════════════════════════════════════════════════
+function undoHydration() {
+  const today=new Date().toISOString().split('T')[0];
+  const idx=D.hydration.map((h,i)=>h.date===today?i:-1).filter(i=>i>=0);
+  if(idx.length===0) return;
+  D.hydration.splice(idx[idx.length-1],1);
+  saveLocal(); updateHydUI();
+  showToast('↩️ Desfeito!','#000','#FFD740');
+}
+
+function hydrationWeekChart() {
+  const el=document.getElementById('hyd-week-chart'); if(!el) return;
+  const days=7;
+  const bars=[];
+  for(let i=days-1;i>=0;i--){
+    const d=new Date(); d.setDate(d.getDate()-i);
+    const dateStr=d.toISOString().split('T')[0];
+    const total=(D.hydration||[]).filter(h=>h.date===dateStr).reduce((s,h)=>s+h.ml,0);
+    const dayName=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'][d.getDay()];
+    bars.push({date:dateStr,total,dayName,isToday:i===0});
+  }
+  const avg=bars.reduce((s,b)=>s+b.total,0)/days;
+  const max=Math.max(...bars.map(b=>b.total),3000);
+  const readyForLongao=avg>=2500;
+  el.innerHTML=`
+    <div style="display:flex;gap:4px;align-items:flex-end;height:80px;margin-bottom:6px">
+      ${bars.map(b=>{
+        const h=Math.max(4,((b.total/max)*100));
+        const c=b.total>=3000?'#69F0AE':b.total>=1800?'#FFD740':'#FF4500';
+        return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px">
+          <div style="font-size:8px;color:${c}">${b.total>0?(b.total/1000).toFixed(1):'—'}</div>
+          <div style="width:100%;height:${h}%;background:${b.isToday?c:c+'55'};border-radius:3px 3px 0 0;min-height:4px;border:${b.isToday?'1px solid '+c:'none'}"></div>
+          <div style="font-size:7px;color:${b.isToday?'#fff':'#555'}">${b.dayName}</div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+      <div style="font-size:10px;color:#555">Média: <strong style="color:${avg>=2500?'#69F0AE':'#FFD740'}">${(avg/1000).toFixed(1)}L/dia</strong></div>
+      <div style="font-size:10px;${readyForLongao?'color:#69F0AE':'color:#FFD740'}">${readyForLongao?'✅ Pronto pro longão':'⚠️ Hidrate mais antes do longo'}</div>
+    </div>`;
+}
+
+function loadWeather() {
+  loadWeatherSP();
+  loadWeatherRJ();
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1238,6 +1521,7 @@ document.getElementById('new-kg-date').value=new Date().toISOString().split('T')
 document.getElementById('t-date').value=new Date().toISOString().split('T')[0];
 
 renderHomeTrainings(); renderScience(); renderStrategy();
+renderWeekPlan(); renderAsicsConnections();
 renderGels(); renderTrainings(); renderWeightChart();
 updateWeightDisplay(); updateHydUI(); updateHeaderStatus();
 renderNutriForm(); updateNutriRecs(); renderSetupSteps();
