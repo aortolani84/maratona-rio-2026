@@ -95,13 +95,14 @@ input[type=range]{width:100%;accent-color:var(--orange);margin-bottom:10px}
 .hyd-btn:hover{background:#222}
 
 /* ── TIMELINE ── */
-.tl-item{display:flex;gap:10px}
+.tl-item{display:flex;gap:12px}
 .tl-left{display:flex;flex-direction:column;align-items:center}
-.tl-dot{width:34px;height:34px;border-radius:50%;border:2px solid;background:var(--bg);display:flex;align-items:center;justify-content:center;font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;flex-shrink:0}
-.tl-line{width:1px;flex:1;background:var(--border);min-height:12px;margin:3px 0}
-.tl-content{flex:1;background:#0e0e0e;border:1px solid;border-left-width:3px;border-radius:6px;padding:9px 12px;margin-bottom:8px}
-.tl-title{font-size:12px;font-weight:600;margin-bottom:4px}
-.tl-tags{display:flex;gap:4px;flex-wrap:wrap}
+.tl-dot{width:42px;height:42px;border-radius:50%;border:2px solid;background:var(--bg);display:flex;align-items:center;justify-content:center;font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;flex-shrink:0}
+.tl-line{width:2px;flex:1;background:var(--border);min-height:14px;margin:3px 0}
+.tl-content{flex:1;background:#0e0e0e;border:1px solid;border-left-width:3px;border-radius:8px;padding:12px 14px;margin-bottom:10px}
+.tl-title{font-size:15px;font-weight:600;margin-bottom:7px;line-height:1.35}
+.tl-tags{display:flex;gap:5px;flex-wrap:wrap}
+.tl-tags .tag{font-size:11px;padding:3px 9px}
 
 /* ── SPLITS ── */
 .split-card{border-left:4px solid;border-radius:8px;padding:12px 14px;margin-bottom:8px;background:var(--bg2);border-top:1px solid var(--border);border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
@@ -273,6 +274,7 @@ input[type=range]{width:100%;accent-color:var(--orange);margin-bottom:10px}
     <button class="tab-btn" onclick="showTab('corpo',this)">⚖️ Corpo</button>
     <button class="tab-btn" onclick="showTab('treinos',this)">📊 Treinos</button>
     <button class="tab-btn" onclick="showTab('percurso',this)">🗺️ Percurso</button>
+    <button class="tab-btn" onclick="showTab('garmin',this)">⌚ Garmin</button>
     <button class="tab-btn" onclick="showTab('clima',this)">🌡️ Clima</button>
     <button class="tab-btn" id="tab-nutri-btn" onclick="showTab('nutri',this)">👩‍⚕️ Nutri</button>
     <button class="tab-btn" onclick="showTab('config',this)">⚙️</button>
@@ -382,7 +384,7 @@ input[type=range]{width:100%;accent-color:var(--orange);margin-bottom:10px}
       <button class="qlink" onclick="showTab('estrategia')"><span>🧠</span> Estratégia</button>
       <button class="qlink" onclick="showTab('geis')"><span>💊</span> Géis</button>
       <button class="qlink" onclick="showTab('percurso')"><span>🗺️</span> Percurso</button>
-      <button class="qlink" onclick="showTab('semana')"><span>📅</span> Semana</button>
+      <button class="qlink" onclick="showTab('garmin')"><span>⌚</span> Garmin</button>
     </div>
 
   </div>
@@ -592,6 +594,72 @@ input[type=range]{width:100%;accent-color:var(--orange);margin-bottom:10px}
     <div class="alert" style="background:#1a0800;border-left:4px solid #FFD740;margin-top:4px">
       <div style="font-size:10px;color:#FFD740;font-weight:700;margin-bottom:4px">☀️ ATENÇÃO · LARGADA 6h20</div>
       <div style="font-size:11px;color:#bbb;line-height:1.6">Com largada às 6h20, você chega na Zona Sul (km 21+) já entre 8h–9h, com sol forte na orla de Ipanema/Copacabana — trechos sem sombra. A hidratação a partir do km 17 é decisiva.</div>
+    </div>
+  </div>
+
+  <!-- GARMIN -->
+  <div id="panel-garmin" class="panel">
+    <div style="background:linear-gradient(135deg,#001a2e,#0a0a0a);border:1px solid rgba(79,195,247,.25);border-radius:14px;padding:16px;margin-bottom:14px">
+      <div style="font-size:9px;color:#4FC3F7;letter-spacing:.15em;margin-bottom:6px">⌚ FORERUNNER 965 · EXECUTOR DA ESTRATÉGIA</div>
+      <div style="font-family:'Oswald',sans-serif;font-size:18px;font-weight:900;color:#fff;margin-bottom:6px">CONFIGURE O RELÓGIO</div>
+      <div style="font-size:12px;color:#888;line-height:1.6">O app é o cérebro da estratégia. O Garmin é o braço que executa nos 42km. Configure tudo no <strong style="color:#FFD740">treino de quinta</strong> — nunca pela primeira vez no dia da prova.</div>
+    </div>
+
+    <div class="card" style="border-color:rgba(206,147,216,.25)">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <div style="width:28px;height:28px;border-radius:8px;background:#CE93D822;display:flex;align-items:center;justify-content:center;font-size:14px">1️⃣</div>
+        <div style="font-size:14px;font-weight:700;color:#CE93D8">Alertas de gel</div>
+      </div>
+      <div style="font-size:13px;color:#aaa;line-height:1.7;margin-bottom:10px">Faz o relógio vibrar nos km de cada gel. No Garmin Connect ou no relógio:</div>
+      <div style="font-size:12px;color:#888;background:#0a0a0a;border-radius:8px;padding:10px 12px;line-height:1.7;margin-bottom:10px">Configurações → Atividades e apps → <strong style="color:#ccc">Corrida</strong> → Alertas → Adicionar → <strong style="color:#ccc">Distância</strong></div>
+      <div style="font-size:13px;color:#aaa;line-height:1.7">Pontos dos géis: <strong style="color:#CE93D8">6,2 · 10 · 17,4 · 23,6 · 27,9 · 33,6 · 39 km</strong></div>
+      <div style="font-size:11px;color:#555;margin-top:8px;line-height:1.6">💡 Se tiver o alerta "Beber/Comer", use-o para lembretes recorrentes. Senão, use a faixa do app como referência principal.</div>
+    </div>
+
+    <div class="card" style="border-color:rgba(255,69,0,.25)">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <div style="width:28px;height:28px;border-radius:8px;background:#FF450022;display:flex;align-items:center;justify-content:center;font-size:14px">2️⃣</div>
+        <div style="font-size:14px;font-weight:700;color:#FF4500">PacePro · guardião do ritmo</div>
+      </div>
+      <div style="font-size:13px;color:#aaa;line-height:1.7;margin-bottom:10px">O recurso-chave do negative split. Avisa se está rápido ou lento demais.</div>
+      <div style="font-size:12px;color:#888;background:#0a0a0a;border-radius:8px;padding:10px 12px;line-height:1.7;margin-bottom:10px">Treino → <strong style="color:#ccc">PacePro</strong> → Criar estratégia</div>
+      <div style="font-size:13px;color:#aaa;line-height:1.9">
+        • Distância: <strong style="color:#fff">42,2 km</strong><br>
+        • Tempo alvo: <strong style="color:#fff">3:42</strong> (meio da janela 3:40–3:45)<br>
+        • Estratégia de elevação: <strong style="color:#fff">ativar</strong> (ajuda no Joá)<br>
+        • Divisão: <strong style="color:#fff">levemente negativa</strong> — começar mais devagar, acelerar
+      </div>
+    </div>
+
+    <div class="card" style="border-color:rgba(255,112,67,.25)">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <div style="width:28px;height:28px;border-radius:8px;background:#FF704322;display:flex;align-items:center;justify-content:center;font-size:14px">3️⃣</div>
+        <div style="font-size:14px;font-weight:700;color:#FF7043">Alerta de FC · freio de segurança</div>
+      </div>
+      <div style="font-size:13px;color:#aaa;line-height:1.7;margin-bottom:10px">Para não estourar no início — seu ponto de atenção.</div>
+      <div style="font-size:12px;color:#888;background:#0a0a0a;border-radius:8px;padding:10px 12px;line-height:1.7;margin-bottom:10px">Alertas → Adicionar → <strong style="color:#ccc">Frequência cardíaca</strong> → Personalizado</div>
+      <div style="font-size:13px;color:#aaa;line-height:1.7">Limite superior: <strong style="color:#FF7043">172 bpm</strong> nos primeiros km. Se vibrar cedo, você largou rápido — segura.</div>
+    </div>
+
+    <div class="card" style="border-color:rgba(105,240,174,.25)">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <div style="width:28px;height:28px;border-radius:8px;background:#69F0AE22;display:flex;align-items:center;justify-content:center;font-size:14px">4️⃣</div>
+        <div style="font-size:14px;font-weight:700;color:#69F0AE">Telas de dados</div>
+      </div>
+      <div style="font-size:12px;color:#888;background:#0a0a0a;border-radius:8px;padding:10px 12px;line-height:1.7;margin-bottom:10px">Atividades e apps → Corrida → <strong style="color:#ccc">Telas de dados</strong></div>
+      <div style="font-size:13px;color:#aaa;line-height:1.7;margin-bottom:6px">Deixe uma tela com 4 campos:</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div style="background:#0a0a0a;border-radius:8px;padding:10px;text-align:center"><div style="font-size:11px;color:#69F0AE;font-weight:700">Pace da volta</div><div style="font-size:9px;color:#555;margin-top:2px">mais estável</div></div>
+        <div style="background:#0a0a0a;border-radius:8px;padding:10px;text-align:center"><div style="font-size:11px;color:#FF7043;font-weight:700">Freq. cardíaca</div></div>
+        <div style="background:#0a0a0a;border-radius:8px;padding:10px;text-align:center"><div style="font-size:11px;color:#4FC3F7;font-weight:700">Distância</div></div>
+        <div style="background:#0a0a0a;border-radius:8px;padding:10px;text-align:center"><div style="font-size:11px;color:#FFD740;font-weight:700">Tempo decorrido</div></div>
+      </div>
+      <div style="font-size:11px;color:#555;margin-top:8px;line-height:1.6">💡 Pace da <em>volta</em> (não o instantâneo, que oscila muito) dá leitura mais confiável.</div>
+    </div>
+
+    <div class="alert" style="background:#1a0800;border-left:4px solid #FFD740">
+      <div style="font-size:11px;color:#FFD740;font-weight:700;margin-bottom:4px">⚠️ TESTE NA QUINTA</div>
+      <div style="font-size:12px;color:#bbb;line-height:1.6">Configure e teste tudo no último treino. Nomes de menu podem variar conforme a versão do software — procure o equivalente se algo não bater.</div>
     </div>
   </div>
 
@@ -1117,7 +1185,7 @@ function renderMorningTimeline() {
   const el=document.getElementById('morning-timeline'); if(!el) return;
   const steps=[
     {h:"4h00",t:"Acordar",d:"Café testado + Nitrato + 400mg cafeína. Banheiro.",c:"#CE93D8"},
-    {h:"5h00",t:"Sair do hotel",d:"~3,5km. No dia há bloqueios — reserve 20–30min.",c:"#FFD740"},
+    {h:"5h00",t:"Sair do hotel",d:"Acesso à Reserva exige contorno (~10km de via). Confira a rota no botão abaixo e reserve folga.",c:"#FFD740"},
     {h:"5h30",t:"Chegar na arena",d:"Guarda-volumes, banheiro, aquecimento leve.",c:"#4FC3F7"},
     {h:"6h00",t:"Posicionar no pelotão",d:"20min antes, sem stress. Últimos goles de água.",c:"#69F0AE"},
     {h:"6h20",t:"LARGADA",d:"Segura a euforia. A prova é longa.",c:"#FF4500"},
