@@ -179,6 +179,19 @@ input[type=range]{width:100%;accent-color:var(--orange);margin-bottom:10px}
 .qlink span{font-size:18px}
 .qlink:active{transform:scale(.97);background:#161616}
 .today-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,69,0,.1);border:1px solid rgba(255,69,0,.3);border-radius:8px;padding:4px 10px;font-size:10px;color:#FF6B3D;font-weight:700}
+.logistics-card{background:#101010;border:1px solid #1f1f1f;border-radius:16px;padding:16px;margin-bottom:12px}
+.logi-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:transparent;border:1px solid;border-radius:10px;padding:11px 8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;text-decoration:none;transition:all .15s}
+.logi-btn:active{transform:scale(.97)}
+.course-card{background:#101010;border:1px solid #1f1f1f;border-radius:16px;padding:16px;margin-bottom:12px}
+.course-strip{position:relative}
+.cs-track{position:relative;height:10px;border-radius:5px;display:flex;overflow:hidden;margin:0 0 6px}
+.cs-seg{height:100%}
+.cs-gels{position:relative;height:46px;margin-top:2px}
+.cs-gel{position:absolute;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:2px}
+.cs-gel-dot{width:11px;height:11px;border-radius:50%;border:2px solid #0a0a0a}
+.cs-gel-km{font-size:7px;color:#888;white-space:nowrap;font-family:'Oswald',sans-serif;font-weight:600}
+.cs-marks{display:flex;justify-content:space-between;margin-top:2px}
+.cs-mark{font-size:7px;color:#444}
 .spinner{display:inline-block;width:12px;height:12px;border:2px solid #333;border-top-color:var(--green);border-radius:50%;animation:spin .8s linear infinite}
 </style>
 </head>
@@ -332,6 +345,28 @@ input[type=range]{width:100%;accent-color:var(--orange);margin-bottom:10px}
         <button class="hyd-btn" style="color:#4FC3F7;border-color:rgba(79,195,247,.3)" onclick="addHydration(750)">+750</button>
         <button class="hyd-btn" style="color:#FFD740;border-color:rgba(255,215,64,.3)" onclick="undoHydration()">↩</button>
       </div>
+    </div>
+
+    <!-- TRAJETO HOTEL → LARGADA -->
+    <div class="logistics-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div style="font-size:11px;color:#fff;font-weight:700;letter-spacing:.08em">🏨 PLANO DA MANHÃ · DIA DA PROVA</div>
+        <div id="depart-countdown" style="font-size:10px;color:#FFD740;font-weight:600"></div>
+      </div>
+      <div id="morning-timeline"></div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <a href="https://www.google.com/maps/dir/Av.+Adolpho+de+Vasconcellos,+401,+Rio+de+Janeiro/Praia+da+Reserva,+Av.+Lúcio+Costa,+Rio+de+Janeiro/" target="_blank" rel="noopener" class="logi-btn" style="color:#4FC3F7;border-color:rgba(79,195,247,.3)">🗺️ Rota + trânsito agora</a>
+        <button onclick="setDepartTime()" class="logi-btn" style="color:#FFD740;border-color:rgba(255,215,64,.3)">⏰ Ajustar saída</button>
+      </div>
+    </div>
+
+    <!-- FAIXA VISUAL DO PERCURSO -->
+    <div class="course-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <div style="font-size:11px;color:#fff;font-weight:700;letter-spacing:.08em">🗺️ PERCURSO + GÉIS + PACE</div>
+        <button onclick="showTab('percurso')" style="background:none;border:none;color:#FF6B3D;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit">Ver mapa →</button>
+      </div>
+      <div id="course-strip"></div>
     </div>
 
     <!-- INDICADORES rápidos -->
@@ -996,8 +1031,138 @@ function updateCountdowns() {
   const chs=document.getElementById('ch-s'); if(chs) chs.textContent=p(r.s);
   // Header dias
   const hd=document.getElementById('hdr-days'); if(hd) hd.textContent=r.d;
+  // Contador de saída do hotel
+  updateDepartCountdown();
 }
 setInterval(updateCountdowns,1000); updateCountdowns();
+
+// ═══════════════════════════════════════════════════════
+// FAIXA VISUAL DO PERCURSO (Home)
+// ═══════════════════════════════════════════════════════
+let RIO_TEMP = null; // atualizado pela API de clima
+
+function climateAdjust(temp) {
+  // Retorna ajuste de estratégia conforme temperatura
+  if(temp===null) return {label:"Verificando clima…",c:"#555",adj:"",extra:""};
+  if(temp>=26) return {label:`${temp}°C · CRÍTICO`,c:"#FF4500",adj:"+15 a 20s/km no pace alvo",extra:"Molhe cabeça/nuca em todo posto. Cápsula de sal extra. Priorize terminar — tempo é secundário hoje."};
+  if(temp>=22) return {label:`${temp}°C · QUENTE`,c:"#FFD740",adj:"+10s/km no pace alvo",extra:"Hidratação redobrada do km17 em diante. Molhe a cabeça nos postos da orla."};
+  if(temp>=18) return {label:`${temp}°C · BOM`,c:"#4FC3F7",adj:"Pace alvo mantido",extra:"Condições favoráveis. Siga a estratégia. Hidratação normal."};
+  return {label:`${temp}°C · IDEAL`,c:"#69F0AE",adj:"Pode buscar a ponta de 3:40",extra:"Clima perfeito para correr. Se as pernas pedirem no km35, pode acelerar com mais folga."};
+}
+
+function renderCourseStrip() {
+  const el=document.getElementById('course-strip'); if(!el) return;
+  const TOTAL=42.2;
+  // Trechos por pace (largura proporcional à distância)
+  const segs=[
+    {ate:10,c:"#4FC3F7",pace:"5:20–5:25"},
+    {ate:18,c:"#69F0AE",pace:"5:15–5:20"},
+    {ate:24,c:"#FFD740",pace:"5:18–5:25"},
+    {ate:34,c:"#FF7043",pace:"5:12–5:18"},
+    {ate:42.2,c:"#FF4500",pace:"5:00–5:18"},
+  ];
+  let prev=0;
+  const track=segs.map(s=>{const w=((s.ate-prev)/TOTAL*100);prev=s.ate;return `<div class="cs-seg" style="width:${w}%;background:${s.c}"></div>`;}).join('');
+
+  // Géis (posição = km / total)
+  const gels=[
+    {km:6.2,nome:"Lemon",c:"#69F0AE"},
+    {km:10,nome:"Powder",c:"#4FC3F7"},
+    {km:17.4,nome:"Espresso+sal",c:"#FF7043"},
+    {km:23.6,nome:"Tropical",c:"#69F0AE"},
+    {km:27.9,nome:"Xtratus☕",c:"#FF4500"},
+    {km:33.6,nome:"Xtratus",c:"#FFD740"},
+    {km:39,nome:"Hidro+sal",c:"#CE93D8"},
+  ];
+  const gelEls=gels.map((g,i)=>{
+    const pos=(g.km/TOTAL*100);
+    // Alterna altura do label para não sobrepor
+    const top=i%2===0?'0':'22px';
+    return `<div class="cs-gel" style="left:${pos}%;top:${top}">
+      <div class="cs-gel-dot" style="background:${g.c}"></div>
+      <div class="cs-gel-km" style="color:${g.c}">${g.km}</div>
+      <div style="font-size:7px;color:#666;white-space:nowrap">${g.nome}</div>
+    </div>`;
+  }).join('');
+
+  const ca=climateAdjust(RIO_TEMP);
+  el.innerHTML=`
+    <div class="cs-track">${track}</div>
+    <div class="cs-marks">
+      <span class="cs-mark">0km · Reserva</span>
+      <span class="cs-mark" style="color:#FFD740">21 · meia</span>
+      <span class="cs-mark">42 · Aterro</span>
+    </div>
+    <div class="cs-gels">${gelEls}</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;padding-top:10px;border-top:1px solid #1a1a1a">
+      <div style="font-size:9px;color:#FFD740">⛰️ Joá km18–24: poupa nas subidas</div>
+      <div style="font-size:9px;color:#FF7043">☀️ km24+: sol forte, hidrata</div>
+    </div>
+    <div style="margin-top:10px;padding:10px 12px;background:${ca.c}11;border:1px solid ${ca.c}33;border-radius:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <div style="font-size:10px;color:${ca.c};font-weight:700;letter-spacing:.05em">🌡️ CLIMA RIO · AJUSTE</div>
+        <div style="font-size:11px;color:${ca.c};font-weight:700">${ca.label}</div>
+      </div>
+      ${ca.adj?`<div style="font-size:11px;color:#fff;font-weight:600;margin-bottom:3px">${ca.adj}</div>`:''}
+      <div style="font-size:10px;color:#999;line-height:1.5">${ca.extra}</div>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+// HORÁRIO DE SAÍDA + CRONOGRAMA DA MANHÃ
+// ═══════════════════════════════════════════════════════
+function getDepartTime(){ return localStorage.getItem('adriano-depart')||'05:00'; }
+
+function renderMorningTimeline() {
+  const el=document.getElementById('morning-timeline'); if(!el) return;
+  const steps=[
+    {h:"4h00",t:"Acordar",d:"Café testado + Nitrato + 400mg cafeína. Banheiro.",c:"#CE93D8"},
+    {h:"5h00",t:"Sair do hotel",d:"~3,5km. No dia há bloqueios — reserve 20–30min.",c:"#FFD740"},
+    {h:"5h30",t:"Chegar na arena",d:"Guarda-volumes, banheiro, aquecimento leve.",c:"#4FC3F7"},
+    {h:"6h00",t:"Posicionar no pelotão",d:"20min antes, sem stress. Últimos goles de água.",c:"#69F0AE"},
+    {h:"6h20",t:"LARGADA",d:"Segura a euforia. A prova é longa.",c:"#FF4500"},
+  ];
+  el.innerHTML=steps.map((s,i,arr)=>`
+    <div style="display:flex;gap:10px;align-items:flex-start">
+      <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+        <div style="width:9px;height:9px;border-radius:50%;background:${s.c};margin-top:3px"></div>
+        ${i<arr.length-1?`<div style="width:1px;flex:1;min-height:24px;background:#222;margin:2px 0"></div>`:''}
+      </div>
+      <div style="flex:1;padding-bottom:${i<arr.length-1?'8px':'0'}">
+        <div style="display:flex;gap:8px;align-items:baseline">
+          <span style="font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:${s.c}">${s.h}</span>
+          <span style="font-size:12px;color:#fff;font-weight:600">${s.t}</span>
+        </div>
+        <div style="font-size:10px;color:#777;line-height:1.4;margin-top:1px">${s.d}</div>
+      </div>
+    </div>`).join('');
+}
+
+function setDepartTime() {
+  const cur=getDepartTime();
+  const val=prompt('Que horas você vai sair do hotel? (formato 24h, ex: 05:00)', cur);
+  if(val && /^\d{1,2}:\d{2}$/.test(val)){
+    localStorage.setItem('adriano-depart', val);
+    updateDepartCountdown();
+    showToast('⏰ Horário de saída salvo: '+val);
+  }
+}
+
+function updateDepartCountdown() {
+  const el=document.getElementById('depart-countdown'); if(!el) return;
+  const depart=getDepartTime();
+  const [h,m]=depart.split(':');
+  const target=new Date(`2026-06-07T${h.padStart(2,'0')}:${m}:00`);
+  const now=new Date();
+  const diff=target-now;
+  if(diff<=0){ el.textContent='🏃 Hora de ir!'; el.style.color='#69F0AE'; return; }
+  const days=Math.floor(diff/86400000);
+  const hrs=Math.floor((diff%86400000)/3600000);
+  const mins=Math.floor((diff%3600000)/60000);
+  if(days>0){ el.textContent=`saída ${depart}`; }
+  else { el.textContent=`saída em ${hrs}h ${mins}min`; }
+  el.style.color='#FFD740';
+}
 
 // ═══════════════════════════════════════════════════════
 // HOJE (treino + data)
@@ -1343,6 +1508,9 @@ function loadWeatherRJ() {
       // Hero da Home
       const ht=document.getElementById('hero-temp'); if(ht) ht.textContent=cur+'°';
       const hwt=document.getElementById('hero-wtag'); if(hwt) hwt.innerHTML=`<span class="tag" style="color:${fi.c};border-color:${fi.c}44;background:${fi.c}11">${fi.l}</span>`;
+      // Atualiza faixa do percurso com a temperatura real
+      RIO_TEMP=Math.round(cur);
+      renderCourseStrip();
       renderForecast('rj-forecast', d, 'RIO DE JANEIRO');
     }).catch(()=>{
       const ht=document.getElementById('hero-temp'); if(ht) ht.textContent='22°';
@@ -1607,6 +1775,7 @@ document.getElementById('t-date').value=new Date().toISOString().split('T')[0];
 
 renderHomeTrainings(); renderScience(); renderStrategy();
 renderWeekPlan(); renderPercurso(); renderToday();
+renderCourseStrip(); updateDepartCountdown(); renderMorningTimeline();
 renderGels(); renderTrainings(); renderWeightChart();
 updateWeightDisplay(); updateHydUI(); updateHeaderStatus();
 renderNutriForm(); updateNutriRecs(); renderSetupSteps();
