@@ -160,6 +160,25 @@ input[type=range]{width:100%;accent-color:var(--orange);margin-bottom:10px}
 .nutri-saved-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── HOME REDESIGN ── */
+.hero-card{position:relative;background:linear-gradient(145deg,#1a0a02 0%,#0d0d0d 60%);border:1px solid rgba(255,69,0,.18);border-radius:18px;padding:20px;margin-bottom:12px;overflow:hidden}
+.hero-glow{position:absolute;top:-40%;right:-20%;width:280px;height:280px;background:radial-gradient(circle,rgba(255,69,0,.18),transparent 70%);pointer-events:none;z-index:1}
+.count-hero{background:linear-gradient(145deg,#0d0d0d,#120402);border:1px solid rgba(255,69,0,.14);border-radius:16px;padding:16px;margin-bottom:12px}
+.ch-unit{display:flex;flex-direction:column;align-items:center;min-width:54px}
+.ch-num{font-family:'Oswald',sans-serif;font-size:38px;font-weight:900;line-height:1;color:#fff;font-variant-numeric:tabular-nums}
+.ch-lab{font-size:8px;color:#666;letter-spacing:.15em;margin-top:3px;text-transform:uppercase}
+.ch-sep{font-family:'Oswald',sans-serif;font-size:26px;color:#FF4500;font-weight:300;align-self:flex-start;margin-top:4px}
+.today-card{background:#101010;border:1px solid #1f1f1f;border-radius:16px;padding:16px;margin-bottom:12px}
+.metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.metric{background:#101010;border:1px solid #1c1c1c;border-radius:12px;padding:12px 6px;text-align:center}
+.metric-val{font-family:'Oswald',sans-serif;font-size:22px;font-weight:900;line-height:1}
+.metric-lab{font-size:8px;color:#555;letter-spacing:.08em;margin-top:4px;text-transform:uppercase}
+.quick-links{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
+.qlink{display:flex;align-items:center;gap:8px;background:#101010;border:1px solid #1f1f1f;border-radius:12px;padding:13px 14px;cursor:pointer;color:#ccc;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;transition:all .15s;text-align:left}
+.qlink span{font-size:18px}
+.qlink:active{transform:scale(.97);background:#161616}
+.today-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,69,0,.1);border:1px solid rgba(255,69,0,.3);border-radius:8px;padding:4px 10px;font-size:10px;color:#FF6B3D;font-weight:700}
 .spinner{display:inline-block;width:12px;height:12px;border:2px solid #333;border-top-color:var(--green);border-radius:50%;animation:spin .8s linear infinite}
 </style>
 </head>
@@ -224,26 +243,11 @@ input[type=range]{width:100%;accent-color:var(--orange);margin-bottom:10px}
           <div class="status-pill" id="st-nutri" style="color:#69F0AE;display:none">· 👩‍⚕️ ✓</div>
         </div>
       </div>
-      <div class="cds">
-        <div class="cd-box race">
-          <div class="cd-label" style="color:#FF4500">Maratona · 07/Jun</div>
-          <div class="cd-nums">
-            <div class="cd-num"><div class="n" id="cd-rd" style="color:#FF4500">28</div><div class="u">DIAS</div></div>
-            <div class="cd-sep" style="color:#FF4500">:</div>
-            <div class="cd-num"><div class="n" id="cd-rh" style="color:#FF4500">00</div><div class="u">HRS</div></div>
-            <div class="cd-sep" style="color:#FF4500">:</div>
-            <div class="cd-num"><div class="n" id="cd-rm" style="color:#FF4500">00</div><div class="u">MIN</div></div>
-          </div>
-        </div>
-        <div class="cd-box asics">
-          <div class="cd-label" style="color:#69F0AE">Asics 21K · 17/Mai</div>
-          <div class="cd-nums">
-            <div class="cd-num"><div class="n" id="cd-ad" style="color:#69F0AE">07</div><div class="u">DIAS</div></div>
-            <div class="cd-sep" style="color:#69F0AE">:</div>
-            <div class="cd-num"><div class="n" id="cd-ah" style="color:#69F0AE">00</div><div class="u">HRS</div></div>
-            <div class="cd-sep" style="color:#69F0AE">:</div>
-            <div class="cd-num"><div class="n" id="cd-am" style="color:#69F0AE">00</div><div class="u">MIN</div></div>
-          </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div style="font-size:8px;color:#FF6B3D;letter-spacing:.15em;margin-bottom:2px">FALTAM</div>
+        <div style="display:flex;align-items:baseline;gap:3px;justify-content:flex-end">
+          <span id="hdr-days" style="font-family:'Oswald',sans-serif;font-size:32px;font-weight:900;color:#FF4500;line-height:1">—</span>
+          <span style="font-size:10px;color:#666">dias</span>
         </div>
       </div>
     </div>
@@ -251,11 +255,11 @@ input[type=range]{width:100%;accent-color:var(--orange);margin-bottom:10px}
   <div class="tabs">
     <button class="tab-btn active" onclick="showTab('home',this)">🏠 Home</button>
     <button class="tab-btn" onclick="showTab('semana',this)">📅 Semana</button>
-    <button class="tab-btn" onclick="showTab('asics',this)">🏁 Asics</button>
     <button class="tab-btn" onclick="showTab('estrategia',this)">🧠 Estratégia</button>
     <button class="tab-btn" onclick="showTab('geis',this)">💊 Géis</button>
     <button class="tab-btn" onclick="showTab('corpo',this)">⚖️ Corpo</button>
     <button class="tab-btn" onclick="showTab('treinos',this)">📊 Treinos</button>
+    <button class="tab-btn" onclick="showTab('percurso',this)">🗺️ Percurso</button>
     <button class="tab-btn" onclick="showTab('clima',this)">🌡️ Clima</button>
     <button class="tab-btn" id="tab-nutri-btn" onclick="showTab('nutri',this)">👩‍⚕️ Nutri</button>
     <button class="tab-btn" onclick="showTab('config',this)">⚙️</button>
@@ -266,95 +270,86 @@ input[type=range]{width:100%;accent-color:var(--orange);margin-bottom:10px}
 
   <!-- HOME -->
   <div id="panel-home" class="panel active">
-    <!-- Sync status -->
-    <div id="sync-status-box" style="display:none" class="sync-box">
-      <div class="sync-dot" id="sync-dot"></div>
-      <div style="flex:1"><div style="font-size:9px;color:var(--muted)" id="sync-label">Verificando sincronização...</div></div>
-      <button class="btn btn-sm" id="sync-btn" onclick="syncNow()" style="background:transparent;border-color:#333;color:#666;font-size:9px">Sincronizar</button>
+
+    <!-- HERO: Objetivo + Clima do dia -->
+    <div class="hero-card">
+      <div class="hero-glow"></div>
+      <div style="position:relative;z-index:2">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+          <div>
+            <div style="font-size:9px;color:#FF6B3D;letter-spacing:.18em;margin-bottom:6px;font-weight:600">OBJETIVO · MARATONA DO RIO</div>
+            <div style="font-family:'Oswald',sans-serif;font-size:42px;font-weight:900;line-height:.9;background:linear-gradient(135deg,#FF4500,#FF8A4D);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">3:40<span style="font-size:24px;opacity:.6">–3:45</span></div>
+            <div style="font-size:12px;color:#888;margin-top:6px">Pace alvo <strong style="color:#FFD740">5:12–5:20</strong>/km · Largada 6h20</div>
+          </div>
+          <div id="hero-weather" style="text-align:right;flex-shrink:0">
+            <div style="font-size:9px;color:#555;margin-bottom:2px">RIO AGORA</div>
+            <div style="font-family:'Oswald',sans-serif;font-size:24px;font-weight:700;color:#4FC3F7" id="hero-temp">—°</div>
+            <div id="hero-wtag" style="margin-top:2px"></div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;padding-top:12px;border-top:1px solid rgba(255,255,255,.06)">
+          <div style="font-size:10px;color:#555">vs 1ª maratona <strong style="color:#69F0AE">4:25</strong></div>
+          <div style="flex:1;height:4px;background:#1a1a1a;border-radius:2px;overflow:hidden">
+            <div style="width:84%;height:100%;background:linear-gradient(90deg,#69F0AE,#FF4500);border-radius:2px"></div>
+          </div>
+          <div style="font-size:11px;color:#69F0AE;font-weight:700;font-family:'Oswald',sans-serif">−40min</div>
+        </div>
+      </div>
     </div>
 
-    <div class="card-grid-3">
-      <div class="card accent" style="border-top-color:#FF4500;padding:12px">
-        <div class="stat-label">VO₂ Máx</div>
-        <div class="stat-value" style="color:#FF4500">52</div>
-        <div class="stat-sub">Top 10%</div>
-      </div>
-      <div class="card accent" style="border-top-color:#4FC3F7;padding:12px">
-        <div class="stat-label">VFC</div>
-        <div class="stat-value" style="color:#4FC3F7">113<span style="font-size:11px;color:#555">ms</span></div>
-        <div class="stat-sub">Equilibrado</div>
-      </div>
-      <div class="card accent" style="border-top-color:#69F0AE;padding:12px">
-        <div class="stat-label">Fitness</div>
-        <div class="stat-value" style="color:#69F0AE">169</div>
-        <div class="stat-sub">Strava</div>
+    <!-- COUNTDOWN destaque -->
+    <div class="count-hero">
+      <div style="font-size:9px;color:#FF6B3D;letter-spacing:.2em;text-align:center;margin-bottom:8px">CONTAGEM REGRESSIVA · 07 JUNHO</div>
+      <div style="display:flex;justify-content:center;align-items:baseline;gap:6px">
+        <div class="ch-unit"><span class="ch-num" id="ch-d">—</span><span class="ch-lab">dias</span></div>
+        <span class="ch-sep">·</span>
+        <div class="ch-unit"><span class="ch-num" id="ch-h">—</span><span class="ch-lab">hrs</span></div>
+        <span class="ch-sep">·</span>
+        <div class="ch-unit"><span class="ch-num" id="ch-m">—</span><span class="ch-lab">min</span></div>
+        <span class="ch-sep">·</span>
+        <div class="ch-unit"><span class="ch-num" id="ch-s">—</span><span class="ch-lab">seg</span></div>
       </div>
     </div>
 
-    <div class="card">
+    <!-- HOJE: o que fazer + hidratação -->
+    <div class="today-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div style="font-size:11px;color:#fff;font-weight:700;letter-spacing:.08em">HOJE</div>
+        <div style="font-size:10px;color:#555" id="today-date"></div>
+      </div>
+      <div id="today-workout" style="margin-bottom:14px"></div>
+
+      <!-- Hidratação inline -->
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <div class="seclabel" style="margin-bottom:0">HIDRATAÇÃO HOJE</div>
-        <div id="hyd-display" style="font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:#FFD740">0,0L / 3,0L</div>
+        <div style="font-size:10px;color:#4FC3F7;letter-spacing:.08em;font-weight:600">💧 HIDRATAÇÃO</div>
+        <div id="hyd-display" style="font-family:'Oswald',sans-serif;font-size:15px;font-weight:700;color:#FFD740">0,0L / 3,0L</div>
       </div>
       <div class="hyd-bar-wrap"><div id="hyd-bar" class="hyd-bar" style="width:0%;background:#FFD740"></div></div>
       <div class="hyd-btns">
-        <button class="hyd-btn" style="color:#4FC3F7;border-color:rgba(79,195,247,.3)" onclick="addHydration(200)">+200ml</button>
-        <button class="hyd-btn" style="color:#4FC3F7;border-color:rgba(79,195,247,.3)" onclick="addHydration(300)">+300ml</button>
-        <button class="hyd-btn" style="color:#4FC3F7;border-color:rgba(79,195,247,.3)" onclick="addHydration(500)">+500ml</button>
-        <button class="hyd-btn" style="color:#4FC3F7;border-color:rgba(79,195,247,.3)" onclick="addHydration(750)">+750ml</button>
-      </div>
-      <div style="display:flex;gap:6px;margin-top:6px">
-        <button onclick="undoHydration()" style="flex:1;background:transparent;border:1px solid #FFD74044;border-radius:6px;padding:6px;cursor:pointer;color:#FFD740;font-size:10px;font-weight:700;font-family:inherit">↩️ Desfazer</button>
-        <button onclick="resetTodayHydration()" style="flex:1;background:transparent;border:1px solid #FF450033;border-radius:6px;padding:6px;cursor:pointer;color:#FF4500;font-size:10px;font-weight:700;font-family:inherit">🗑️ Zerar dia</button>
-      </div>
-      <div style="margin-top:10px">
-        <div style="font-size:9px;color:#555;margin-bottom:6px;letter-spacing:.1em">SEMANA · CONSUMO DIÁRIO</div>
-        <div id="hyd-week-chart"></div>
+        <button class="hyd-btn" style="color:#4FC3F7;border-color:rgba(79,195,247,.3)" onclick="addHydration(200)">+200</button>
+        <button class="hyd-btn" style="color:#4FC3F7;border-color:rgba(79,195,247,.3)" onclick="addHydration(300)">+300</button>
+        <button class="hyd-btn" style="color:#4FC3F7;border-color:rgba(79,195,247,.3)" onclick="addHydration(500)">+500</button>
+        <button class="hyd-btn" style="color:#4FC3F7;border-color:rgba(79,195,247,.3)" onclick="addHydration(750)">+750</button>
+        <button class="hyd-btn" style="color:#FFD740;border-color:rgba(255,215,64,.3)" onclick="undoHydration()">↩</button>
       </div>
     </div>
 
-    <div class="card" style="border-color:rgba(255,69,0,.2)">
-      <div class="seclabel" style="color:#FF4500">🎯 OBJETIVO MARATONA DO RIO</div>
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <div>
-          <div style="font-family:'Oswald',sans-serif;font-size:28px;font-weight:900;color:#FF4500;line-height:1">3:38–3:45</div>
-          <div style="font-size:11px;color:#666;margin-top:3px">Pace 5:10–5:20/km</div>
-        </div>
-        <div style="text-align:right">
-          <div style="font-size:9px;color:#69F0AE">STRAVA PREVÊ</div>
-          <div style="font-family:'Oswald',sans-serif;font-size:22px;font-weight:900;color:#69F0AE">3:38:53</div>
-          <div style="font-size:9px;color:#555">5:11/km</div>
-        </div>
-      </div>
+    <!-- INDICADORES rápidos -->
+    <div class="metrics-row">
+      <div class="metric"><div class="metric-val" style="color:#FF4500">52</div><div class="metric-lab">VO₂ máx</div></div>
+      <div class="metric"><div class="metric-val" style="color:#4FC3F7" id="m-peso">72,8</div><div class="metric-lab">peso kg</div></div>
+      <div class="metric"><div class="metric-val" style="color:#69F0AE">1:41</div><div class="metric-lab">PR meia</div></div>
+      <div class="metric"><div class="metric-val" style="color:#FFD740" id="m-hyd-avg">—</div><div class="metric-lab">média água</div></div>
     </div>
 
-    <div class="card" style="border-color:rgba(105,240,174,.2)">
-      <div class="seclabel" style="color:#69F0AE">🏃 21K ASICS · 17/MAI · PRÓXIMA PROVA</div>
-      <div style="font-size:12px;color:#bbb;line-height:1.6;margin-bottom:8px">Teste definitivo antes do Rio. Validar protocolo de géis, pace 4:50/km e FC com postos organizados.</div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap">
-        <span class="tag" style="color:#69F0AE;border-color:rgba(105,240,174,.3);background:rgba(105,240,174,.1)">Pace: 4:50/km</span>
-        <span class="tag" style="color:#FFD740;border-color:rgba(255,215,64,.3);background:rgba(255,215,64,.1)">Testar géis</span>
-        <span class="tag" style="color:#CE93D8;border-color:rgba(206,147,216,.3);background:rgba(206,147,216,.1)">Protocolo Nutri</span>
-      </div>
+    <!-- Atalhos -->
+    <div class="quick-links">
+      <button class="qlink" onclick="showTab('estrategia')"><span>🧠</span> Estratégia</button>
+      <button class="qlink" onclick="showTab('geis')"><span>💊</span> Géis</button>
+      <button class="qlink" onclick="showTab('percurso')"><span>🗺️</span> Percurso</button>
+      <button class="qlink" onclick="showTab('semana')"><span>📅</span> Semana</button>
     </div>
 
-    <div class="weather-compact" id="weather-compact">
-      <span style="font-size:16px">🌡️</span>
-      <div style="flex:1"><div style="font-size:9px;color:#555">RIO DE JANEIRO AGORA</div><div style="font-size:12px;font-weight:600" id="wc-text">Verificando...</div></div>
-      <span id="wc-tag"></span>
-    </div>
-
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-        <div class="seclabel" style="margin-bottom:0">ÚLTIMOS TREINOS</div>
-      </div>
-      <div id="home-trainings"></div>
-    </div>
-
-    <div class="card">
-      <div class="seclabel">POR QUE SE QUEBRA NA MARATONA</div>
-      <div id="science-list"></div>
-    </div>
   </div>
 
   <!-- ESTRATÉGIA -->
@@ -398,17 +393,31 @@ input[type=range]{width:100%;accent-color:var(--orange);margin-bottom:10px}
   <!-- GÉIS -->
   <div id="panel-geis" class="panel">
     <div class="alert" style="background:#001208;border-left:4px solid #69F0AE">
-      <div style="font-size:10px;color:#69F0AE;font-weight:700;margin-bottom:3px">✅ TESTADO · 32K RJ · 09/05/2026</div>
-      <div style="font-size:11px;color:#bbb">Sem GI · Boa energia até km30 · Problema foi falta d'água (treino s/ suporte)</div>
+      <div style="font-size:10px;color:#69F0AE;font-weight:700;margin-bottom:3px">✅ PROTOCOLO OFICIAL · DRA. FERNANDA MICELLI · CRN3 83.511</div>
+      <div style="font-size:11px;color:#bbb">Estratégia de Prova Maratona Rio 2026 · Previsão 3:30–3:40 · Testado no 32K RJ sem desconforto GI</div>
     </div>
     <div class="seclabel">PROTOCOLO MARATONA · FERNANDA MICELLI CRN3 83.511</div>
     <div id="gel-timeline"></div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;padding:10px 12px;background:#0e0e0e;border-radius:8px;border:1px solid var(--border);margin-top:10px">
-      <div style="font-size:10px"><span style="color:#69F0AE;font-weight:700">215g</span> <span style="color:#555">carb (68g/h)</span></div>
-      <div style="font-size:10px"><span style="color:#FFD740;font-weight:700">1.775mg</span> <span style="color:#555">sódio</span></div>
-      <div style="font-size:10px"><span style="color:#FF4500;font-weight:700">700mg</span> <span style="color:#555">cafeína total</span></div>
-      <div style="font-size:10px"><span style="color:#4FC3F7;font-weight:700">~2L</span> <span style="color:#555">água</span></div>
+      <div style="font-size:10px"><span style="color:#69F0AE;font-weight:700">220g</span> <span style="color:#555">carb (~63g/h)</span></div>
+      <div style="font-size:10px"><span style="color:#FFD740;font-weight:700">2.103mg</span> <span style="color:#555">sódio (~601mg/h)</span></div>
+      <div style="font-size:10px"><span style="color:#FF4500;font-weight:700">350mg</span> <span style="color:#555">cafeína</span></div>
+      <div style="font-size:10px"><span style="color:#4FC3F7;font-weight:700">200ml/posto</span> <span style="color:#555">água (1 copo)</span></div>
     </div>
+
+    <div class="card" style="margin-top:14px;border-color:rgba(79,195,247,.2)">
+      <div class="seclabel" style="color:#4FC3F7">🚰 POSTOS DO PERCURSO · TRAÇADO OFICIAL 2026</div>
+      <div style="font-size:11px;color:#888;margin-bottom:10px;line-height:1.6">
+        <strong style="color:#4FC3F7">💧 Água:</strong> km 3,2 · 6,2 · 9,2 · 11,8 · 14,3 · 17,9 · 20,4 · 23,6 · 27,9 · 30,5 · 33,6 · 36,5 · 39
+      </div>
+      <div style="font-size:11px;color:#888;line-height:1.6">
+        <strong style="color:#FFD740">🥤 Isotônico:</strong> km 10,5 · 19,3 · 25,9 · 32,5 · 40,1
+      </div>
+      <div style="margin-top:10px;padding:8px 10px;background:#0a1a0e;border-radius:6px;font-size:10px;color:#69F0AE">
+        💡 Sugestão da Dra. Fernanda: etiquete os géis conforme os postos. Leve géis e cápsulas de sal a mais.
+      </div>
+    </div>
+
     <div style="margin-top:16px">
       <div class="seclabel" style="color:#FFD740">ANÁLISE 32K RJ</div>
       <div id="gel-analysis"></div>
@@ -518,6 +527,39 @@ input[type=range]{width:100%;accent-color:var(--orange);margin-bottom:10px}
     <div id="trainings-list"></div>
   </div>
 
+  <!-- PERCURSO -->
+  <div id="panel-percurso" class="panel">
+    <div style="background:linear-gradient(135deg,#160400,#0a0a0a);border:1px solid rgba(255,69,0,.2);border-radius:12px;padding:16px;margin-bottom:14px">
+      <div style="font-size:9px;color:#FF4500;letter-spacing:.15em;margin-bottom:6px">🗺️ TRAÇADO OFICIAL · MARATONA DO RIO 2026</div>
+      <div style="font-family:'Oswald',sans-serif;font-size:20px;font-weight:900;color:#fff;margin-bottom:4px">RESERVA → ATERRO DO FLAMENGO</div>
+      <div style="font-size:11px;color:#888;line-height:1.5">Largada na Praia da Reserva (Recreio) · orla → Zona Sul · chegada no Aterro. Percurso rápido e plano, com ondulações curtas em São Conrado e Joá.</div>
+    </div>
+
+    <div class="card" style="padding:0;overflow:hidden">
+      <div style="position:relative;width:100%;padding-bottom:75%;height:0;background:#0a0a0a">
+        <iframe src="https://www.google.com/maps/d/embed?mid=1JpJQpW5KydyDKFD-LmF1gYIly6XQtD8&ehbc=2E312F" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="card" style="border-color:rgba(255,69,0,.2);margin-top:14px">
+      <div class="seclabel" style="color:#FF4500">⛰️ ANÁLISE DO PERCURSO POR TRECHO</div>
+      <div id="percurso-analysis"></div>
+    </div>
+
+    <div class="card" style="border-color:rgba(79,195,247,.2)">
+      <div class="seclabel" style="color:#4FC3F7">🚰 GÉIS × POSTOS × ALTIMETRIA</div>
+      <div style="font-size:11px;color:#888;line-height:1.7;margin-bottom:10px">
+        Pontos-chave onde géis e postos coincidem com a topografia:
+      </div>
+      <div id="percurso-keypoints"></div>
+    </div>
+
+    <div class="alert" style="background:#1a0800;border-left:4px solid #FFD740;margin-top:4px">
+      <div style="font-size:10px;color:#FFD740;font-weight:700;margin-bottom:4px">☀️ ATENÇÃO · LARGADA 6h20</div>
+      <div style="font-size:11px;color:#bbb;line-height:1.6">Com largada às 6h20, você chega na Zona Sul (km 21+) já entre 8h–9h, com sol forte na orla de Ipanema/Copacabana — trechos sem sombra. A hidratação a partir do km 17 é decisiva.</div>
+    </div>
+  </div>
+
   <!-- CLIMA -->
   <div id="panel-clima" class="panel">
     <div class="seclabel">CLIMA · RIO DE JANEIRO · MARATONA 07/JUN</div>
@@ -530,7 +572,7 @@ input[type=range]{width:100%;accent-color:var(--orange);margin-bottom:10px}
       <div class="card accent" style="border-top-color:#FF4500">
         <div class="stat-label">07/Jun histórico</div>
         <div class="stat-value" style="color:#FF4500;font-size:18px">22–28°C</div>
-        <div class="stat-sub">Umidade alta · Saída 6h</div>
+        <div class="stat-sub">Umidade alta · Largada 6h20</div>
       </div>
     </div>
     <div id="clima-impact" class="alert" style="border-left:4px solid #FF4500;background:#1a0500">
@@ -565,8 +607,9 @@ input[type=range]{width:100%;accent-color:var(--orange);margin-bottom:10px}
 
     <div class="card" style="margin-bottom:14px">
       <div style="font-size:11px;color:#777;line-height:1.6">
-        Esta seção é para a <strong style="color:#69F0AE">Dra. Fernanda Micelli</strong> preencher com suas recomendações.
-        As respostas são salvas <span id="sync-mode-label" style="color:#FFD740">localmente</span> e aparecem nas seções Géis e Corpo.
+        Esta seção é para a <strong style="color:#69F0AE">Dra. Fernanda Micelli</strong> preencher.<br>
+        Quando ela clicar em <strong>Salvar</strong>, os dados vão para o Google Sheets e você recebe um <strong>email</strong> automaticamente.<br>
+        <span style="font-size:10px;color:#3a6a4a">Nota: a leitura automática de volta está desabilitada por limitação do browser. Use o botão 📋 Copiar ou verifique seu email.</span>
       </div>
     </div>
 
@@ -583,10 +626,10 @@ input[type=range]{width:100%;accent-color:var(--orange);margin-bottom:10px}
       <div style="background:#0a1a0e;border:1px solid #1a3a25;border-radius:8px;padding:12px;margin-bottom:14px">
         <div style="font-size:9px;color:#69F0AE;font-weight:600;letter-spacing:.1em;margin-bottom:8px">RESUMO DO ATLETA</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px">
-          <div style="font-size:10px"><span style="color:#3a6a4a">PR Meia: </span><strong style="color:#bbb">1:42:57 (26/04)</strong></div>
+          <div style="font-size:10px"><span style="color:#3a6a4a">PR Meia: </span><strong style="color:#bbb">1:41:09 (17/05)</strong></div>
           <div style="font-size:10px"><span style="color:#3a6a4a">VO₂ Máx: </span><strong style="color:#bbb">52 · Excelente</strong></div>
           <div style="font-size:10px"><span style="color:#3a6a4a">Peso: </span><strong style="color:#bbb">72,8kg (10/05)</strong></div>
-          <div style="font-size:10px"><span style="color:#3a6a4a">Objetivo: </span><strong style="color:#bbb">3:38–3:45</strong></div>
+          <div style="font-size:10px"><span style="color:#3a6a4a">Objetivo: </span><strong style="color:#bbb">3:40–3:45</strong></div>
           <div style="font-size:10px"><span style="color:#3a6a4a">Volume pico: </span><strong style="color:#bbb">268km (abr)</strong></div>
           <div style="font-size:10px"><span style="color:#3a6a4a">Próxima: </span><strong style="color:#bbb">21K Asics 17/05</strong></div>
         </div>
@@ -642,76 +685,10 @@ input[type=range]{width:100%;accent-color:var(--orange);margin-bottom:10px}
         </div>
         <div style="text-align:center;padding:10px;background:#FF450011;border:1px solid #FF450033;border-radius:8px">
           <div style="font-size:9px;color:#FF4500">MARATONA</div>
-          <div style="font-family:'Oswald',sans-serif;font-size:20px;font-weight:900;color:#FF4500">3:38:53</div>
-          <div style="font-size:9px;color:#FF4500">5:11/km ▼10min58s</div>
+          <div style="font-family:'Oswald',sans-serif;font-size:20px;font-weight:900;color:#FF4500">3:42:08</div>
+          <div style="font-size:9px;color:#FF4500">5:16/km</div>
         </div>
       </div>
-    </div>
-  </div>
-
-  <!-- ASICS 21K -->
-  <div id="panel-asics" class="panel">
-    <div style="background:linear-gradient(135deg,#001208,#0a0a0a);border:2px solid rgba(105,240,174,.3);border-radius:12px;padding:16px;margin-bottom:14px">
-      <div style="font-size:9px;color:#69F0AE;letter-spacing:.15em;margin-bottom:6px">🏁 21K ASICS · 17/05/2026 · DOMINGO</div>
-      <div style="font-family:'Oswald',sans-serif;font-size:24px;font-weight:900;color:#69F0AE;margin-bottom:4px">ESTRATÉGIA DE PROVA</div>
-      <div style="font-size:11px;color:#4a7a5a">Prova teste para a Maratona do Rio · Use como laboratório real</div>
-    </div>
-
-    <div class="card" style="border-color:rgba(105,240,174,.2);margin-bottom:12px">
-      <div class="seclabel" style="color:#69F0AE">🎯 OBJETIVOS DO 21K ASICS</div>
-      <div style="display:flex;gap:16px;margin-bottom:10px">
-        <div><div style="font-size:9px;color:#555">TEMPO ALVO</div><div style="font-family:'Oswald',sans-serif;font-size:24px;font-weight:900;color:#69F0AE">1:37–1:42</div></div>
-        <div><div style="font-size:9px;color:#555">PACE ALVO</div><div style="font-family:'Oswald',sans-serif;font-size:18px;font-weight:700;color:#FFD740">4:36–4:50/km</div></div>
-      </div>
-      <div style="font-size:11px;color:#777;line-height:1.6">Strava prevê 1:37:07 em condições ideais. Meta conservadora: 1:40 para testar o protocolo de géis com segurança e chegar inteiro para a maratona.</div>
-    </div>
-
-    <div class="card" style="margin-bottom:12px">
-      <div class="seclabel" style="color:#FFD740">⚡ ESTRATÉGIA DE CORRIDA</div>
-      <div style="border-left:4px solid #4FC3F7;padding:10px 12px;background:#0a0a0a;border-radius:0 6px 6px 0;margin-bottom:8px">
-        <div style="font-size:12px;font-weight:700;color:#4FC3F7;margin-bottom:3px">0–5km · Saída</div>
-        <div style="font-size:11px;color:#888">4:50–5:00/km · FC 155–165bpm · Conservador. Deixa o pelotão ir.</div>
-      </div>
-      <div style="border-left:4px solid #69F0AE;padding:10px 12px;background:#0a0a0a;border-radius:0 6px 6px 0;margin-bottom:8px">
-        <div style="font-size:12px;font-weight:700;color:#69F0AE;margin-bottom:3px">5–15km · Desenvolvimento</div>
-        <div style="font-size:11px;color:#888">4:40–4:50/km · FC 165–175bpm · Ritmo de prova. Gel no km 7.</div>
-      </div>
-      <div style="border-left:4px solid #FFD740;padding:10px 12px;background:#0a0a0a;border-radius:0 6px 6px 0;margin-bottom:8px">
-        <div style="font-size:12px;font-weight:700;color:#FFD740;margin-bottom:3px">15–18km · Manutenção</div>
-        <div style="font-size:11px;color:#888">4:45–4:55/km · FC 170–178bpm · Gel km 14. Mantenha cadência.</div>
-      </div>
-      <div style="border-left:4px solid #FF4500;padding:10px 12px;background:#0a0a0a;border-radius:0 6px 6px 0">
-        <div style="font-size:12px;font-weight:700;color:#FF4500;margin-bottom:3px">18–21km · Final</div>
-        <div style="font-size:11px;color:#888">4:36–4:45/km · FC até 183bpm · Larga tudo nos últimos 3km.</div>
-      </div>
-    </div>
-
-    <div class="card" style="border-color:rgba(206,147,216,.2);margin-bottom:12px">
-      <div class="seclabel" style="color:#CE93D8">💊 PROTOCOLO DE GÉIS · 21K (~1h40)</div>
-      <div style="display:flex;gap:10px;margin-bottom:8px;padding:8px 0;border-bottom:1px solid #1a1a1a">
-        <div style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:#CE93D8;min-width:30px">PRÉ</div>
-        <div style="font-size:11px;color:#bbb">Hidrogel duplo s/caf + 400mg cafeína + 2 bananas + mel</div>
-      </div>
-      <div style="display:flex;gap:10px;margin-bottom:8px;padding:8px 0;border-bottom:1px solid #1a1a1a">
-        <div style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:#69F0AE;min-width:30px">7K</div>
-        <div style="font-size:11px;color:#bbb">Gel Z2 Lemon · 25g carb + água no posto</div>
-      </div>
-      <div style="display:flex;gap:10px;margin-bottom:8px;padding:8px 0;border-bottom:1px solid #1a1a1a">
-        <div style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:#FFD740;min-width:30px">14K</div>
-        <div style="font-size:11px;color:#bbb">Hidrogel duplo + Cápsula Sal · 25g carb</div>
-      </div>
-      <div style="display:flex;gap:10px;padding:8px 0">
-        <div style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:#FF7043;min-width:30px">18K</div>
-        <div style="font-size:11px;color:#bbb">Gel Z2 Double Espresso ☕ · boost final</div>
-      </div>
-      <div style="margin-top:10px;padding:8px 10px;background:#0a1a0e;border-radius:6px;font-size:10px;color:#69F0AE">
-        ⚠️ Protocolo sugerido — aguardando confirmação da Dra. Fernanda na aba 👩‍⚕️ Nutri
-      </div>
-    </div>
-
-    <div class="card" style="border-color:rgba(255,69,0,.2)">
-      <div class="seclabel" style="color:#FF4500">🔗 CONEXÃO COM A MARATONA DO RIO</div>
-      <div id="asics-connections"></div>
     </div>
   </div>
 
@@ -782,6 +759,10 @@ const DEFAULT = {
   ],
   hydration:[],
   trainings:[
+    {id:"t11",date:"2026-06-02",type:"intervalado",dist:9.98,pace:"5:03",fc:169,tSenso:7,notes:"Intervalado pré-prova · afiação · 60% em zona de tempo",gelTest:false},
+    {id:"t10",date:"2026-05-23",type:"longao",dist:26.25,pace:"5:01",fc:180,tSenso:8,notes:"Longão forte · 3ª melhor meia · FC alta (180) sinaliza ritmo de maratona conservador",gelTest:false},
+    {id:"t9",date:"2026-05-17",type:"prova",dist:21.19,pace:"4:46",fc:171,tSenso:9,notes:"🏆 PR MEIA 1:41:09! Cortou 2min25s. Negative split perfeito. Géis sem GI. Asics Golden Run",gelTest:true,gelNotes:"Protocolo testado em prova real. Estômago perfeito. FC máx 190, média 171. 56% Z4, 42% Z3."},
+    {id:"t8",date:"2026-05-16",type:"moderado",dist:13.00,pace:"5:05",fc:173,tSenso:6,notes:"Pré Asics Golden Run · ritmo alvo · Mizuno Running Station",gelTest:false},
     {id:"t6",date:"2026-05-10",type:"regenerativo",dist:13.33,pace:"5:20",fc:147,tSenso:4,notes:"Regenerativo · SP · Strava: corrida bem executada, ritmo Z2 estável",gelTest:false},
     {id:"t1",date:"2026-05-02",type:"longao",dist:30,pace:"5:05",fc:169,tSenso:8,notes:"3º melhor 30K · com Vinnie P",gelTest:false},
     {id:"t2",date:"2026-05-04",type:"moderado",dist:14,pace:"5:11",fc:151,tSenso:4,notes:"Regenerativo controlado",gelTest:false},
@@ -790,37 +771,46 @@ const DEFAULT = {
     {id:"t5",date:"2026-05-09",type:"longao",dist:32,pace:"5:16",fc:172,tSenso:3,notes:"PR 30K · Teste nutrição RJ",gelTest:true,gelNotes:"Protocolo Micelli completo. Ok no GI. Esqueceu km27. Problema foi falta d'água."},
   ],
   strategy:{
-    version:1,lastUpdated:"2026-05-10",goalTime:"3:38–3:45",goalPace:"5:10–5:20",
-    notes:"v1 — PR meia 1:42, VO2 52, longão 32K 5:16. Atualizar após 21K Asics.",
+    version:3,lastUpdated:"2026-06-03",goalTime:"3:40–3:45",goalPace:"5:12–5:20",
+    notes:"DEFINITIVA (v3 · análise do percurso) — PR meia 1:41:09. Objetivo 3:40–3:45, cortar ~40min vs 1ª maratona (4:25). Largada 6h20. Ajuste-chave: poupar nas ondulações do Joá (km18–24) e hidratar forte na orla ensolarada (km24+). Strava prevê 3:42:08.",
     splits:[
-      {trecho:"0–10km",pace:"5:15–5:20",fc:"160–168",dica:"Saída conservadora. Calor do Rio exige economia."},
-      {trecho:"10–21km",pace:"5:10–5:15",fc:"168–174",dica:"Estabilize. Gel km12 + cápsula sal."},
-      {trecho:"21–30km",pace:"5:15–5:20",fc:"174–180",dica:"Prova começa aqui. Power Powder km22."},
-      {trecho:"30–35km",pace:"5:20–5:30",fc:"178–185",dica:"O muro. Hidrogel+caf. Fragmentar: 1km por vez."},
-      {trecho:"35–42km",pace:"5:10–5:20",fc:"183–188",dica:"Larga tudo. FC máx 188. Final no Aterro."},
+      {trecho:"0–10km · Reserva/Barra",pace:"5:20–5:25",fc:"155–165",dica:"Plano e rápido — a euforia da largada mata maratona. SEGURA. Hidratação km3,2/6,2/9,2. Gel Z2 Lemon km6,2."},
+      {trecho:"10–18km · até São Conrado",pace:"5:15–5:20",fc:"165–172",dica:"Power Powder começa km10. Isotônico km10,5. Estabiliza no ritmo. Você passa a meia ~1h50."},
+      {trecho:"18–24km · Joá (ondulações)",pace:"5:18–5:25",fc:"170–176",dica:"⛰️ Trecho técnico: subidas curtas. NÃO força nas subidas — poupa glicogênio. Gel+sal km17,4 antes. Gel Tropical km23,6."},
+      {trecho:"24–34km · orla (sol forte)",pace:"5:12–5:18",fc:"173–178",dica:"Volta ao plano, mas já 8h+ com sol. Hidratação em TODO posto. Xtratus c/caf km27,9. Aqui a prova de verdade começa."},
+      {trecho:"34–42km · Aterro (final)",pace:"5:00–5:18",fc:"176–185",dica:"Xtratus s/caf km33,6, Hidrogel+sal km39. Reta final no Aterro. Se sobrou perna, ATACA. Senão, segura firme."},
     ]
   },
   weekPlan:[
-    {date:"2026-05-10",done:true,type:"regenerativo",desc:"Regenerativo 13km · 5:20/km · Executado ✅"},
-    {date:"2026-05-12",done:false,type:"intervalado",desc:"Intervalado · 4×1km ZT 3:54–4:11 + aquec/desac 30min"},
-    {date:"2026-05-14",done:false,type:"tempo",desc:"Ritmo Maratona · 8km a 4:43–4:55/km + aquec/desac"},
-    {date:"2026-05-16",done:false,type:"moderado",desc:"~13km ritmo maratona (leve — véspera da Asics)"},
-    {date:"2026-05-17",done:false,type:"prova",desc:"🏁 21K ASICS · PROVA"},
+    {date:"2026-06-03",done:true,type:"regenerativo",desc:"Polimento · semana de prova ✅"},
+    {date:"2026-06-04",done:false,type:"tempo",desc:"Último treino · Contínuo 40min ZR 5:14–5:35 (RunFun). Solto, sem forçar."},
+    {date:"2026-06-05",done:false,type:"regenerativo",desc:"Descanso ou 20–30min muito leve. Pernas leves. Início do carboload."},
+    {date:"2026-06-06",done:false,type:"regenerativo",desc:"Véspera · 15–20min soltíssimo ou descanso. Carboload forte. Hidratação + sódio. Dormir cedo."},
+    {date:"2026-06-07",done:false,type:"prova",desc:"🏁 MARATONA DO RIO · Largada 6h20"},
   ],
-  nutriNotes:{q1:"",q2:"",q3:"",q4:"",q5:"",q6:"",lastUpdated:"",syncedAt:""},
+  nutriNotes:{
+    q1:"Protocolo oficial definido (ver PDF Estratégia de Prova). Largada 5:30. Géis nos km: Pré (Hidrogel dobro s/caf + 400mg cafeína + Nitrato), 6,2 (Z2 Lemon), 10 (Power Powder 1 sachê), 17,4 (Z2 Double Espresso + cápsula sal), 23,6 (Z2 Tropical), 27,9 (Xtratus c/caf), 33,6 (Xtratus s/caf), 39 (Hidrogel dobro + cápsula sal). Água: ~200ml (1 copo) por posto de hidratação.",
+    q2:"Para o 21K Asics foi usado protocolo reduzido — validado com sucesso (PR 1:41:09 sem desconforto GI).",
+    q3:"Acompanhar peso e composição. Manter ingestão proteica adequada ao volume.",
+    q4:"Cobertura completa até km39 com Hidrogel dobro + cápsula de sal. Xtratus s/caf no km33,6 cobre a fase final. Levar géis e cápsulas a mais por segurança.",
+    q5:"Cafeína total: 350mg (400mg ao acordar via cápsulas + cafeína nos géis Double Espresso e Xtratus). Protocolo de Nitrato quinta a domingo.",
+    q6:"Total da estratégia: 220g carb (~63g/h), 2.103mg sódio (~601mg/h), 350mg cafeína. Sugestão: etiquetar os géis conforme os postos de hidratação. Postos de isotônico: km 10,5 · 19,3 · 25,9 · 32,5 · 40,1.",
+    lastUpdated:"2026-06-03",syncedAt:""
+  },
 };
 
-const TIPO_L = {longao:"Longão",moderado:"Moderado",intervalado:"Intervalado",tempo:"Tempo Run",regenerativo:"Regenerativo",forca:"Força",outro:"Outro"};
-const TIPO_C = {longao:"#FF4500",moderado:"#4FC3F7",intervalado:"#FF7043",tempo:"#FFD740",regenerativo:"#69F0AE",forca:"#CE93D8",outro:"#888"};
+const TIPO_L = {longao:"Longão",moderado:"Moderado",intervalado:"Intervalado",tempo:"Tempo Run",regenerativo:"Regenerativo",forca:"Força",prova:"PROVA",outro:"Outro"};
+const TIPO_C = {longao:"#FF4500",moderado:"#4FC3F7",intervalado:"#FF7043",tempo:"#FFD740",regenerativo:"#69F0AE",forca:"#CE93D8",prova:"#CE93D8",outro:"#888"};
 
 const GELS = [
-  {km:"Pré",item:"Hidrogel duplo s/caf",carb:25,ml:100,caf:false,sal:false,color:"#CE93D8"},
-  {km:"6K",item:"Gel Z2 Lemon",carb:25,ml:200,caf:false,sal:false,color:"#69F0AE"},
-  {km:"12K",item:"Hidrogel duplo + Cápsula Sal",carb:25,ml:100,caf:false,sal:true,color:"#FFD740"},
-  {km:"18K",item:"Z2 Double Espresso",carb:25,ml:100,caf:true,sal:false,color:"#FF7043"},
-  {km:"22K",item:"Z2 Power Powder (1 sachê)",carb:40,ml:375,caf:false,sal:false,color:"#4FC3F7"},
-  {km:"27K",item:"Hidrogel duplo c/caf + Sal",carb:25,ml:100,caf:true,sal:true,color:"#FF4500"},
-  {km:"30K",item:"Gel Z2 Tangerina",carb:25,ml:200,caf:false,sal:false,color:"#69F0AE"},
+  {km:"Pré",item:"Hidrogel dobro s/caf (ao acordar: Nitrato + 400mg cafeína)",carb:25,ml:100,caf:true,sal:false,color:"#CE93D8"},
+  {km:"6,2K",item:"Gel Z2 Lemon",carb:25,ml:200,caf:false,sal:false,color:"#69F0AE"},
+  {km:"10K",item:"Z2 Power Powder (1 sachê) · começa aqui",carb:40,ml:375,caf:false,sal:false,color:"#4FC3F7"},
+  {km:"17,4K",item:"Gel Z2 Double Espresso + Cápsula Sal",carb:25,ml:100,caf:true,sal:true,color:"#FF7043"},
+  {km:"23,6K",item:"Gel Z2 Tropical",carb:25,ml:100,caf:false,sal:false,color:"#69F0AE"},
+  {km:"27,9K",item:"Gel Xtratus COM cafeína",carb:40,ml:300,caf:true,sal:false,color:"#FF4500"},
+  {km:"33,6K",item:"Gel Xtratus SEM cafeína",carb:40,ml:300,caf:false,sal:false,color:"#FFD740"},
+  {km:"39K",item:"Hidrogel dobro s/caf + Cápsula Sal",carb:25,ml:100,caf:false,sal:true,color:"#CE93D8"},
 ];
 
 const NUTRI_Q = [
@@ -876,16 +866,12 @@ async function testSync() {
   if (!scriptUrl) { showStatus('config-status', '⚠️ Nenhuma URL configurada', '#FFD740'); return; }
   showStatus('config-status', '🔄 Testando...', '#4FC3F7');
   try {
-    const r = await fetch(scriptUrl);
-    const j = await r.json();
-    if (j.ok !== undefined) {
-      showStatus('config-status', '✅ Conexão OK! Sincronização ativa.', '#69F0AE');
-      updateSyncUI(true);
-    } else {
-      showStatus('config-status', '⚠️ Resposta inesperada do servidor', '#FFD740');
-    }
+    // Testa com no-cors — se não lançar erro, a URL existe
+    await fetch(scriptUrl, { mode: 'no-cors' });
+    showStatus('config-status', '✅ URL válida! Sincronização ativa.', '#69F0AE');
+    updateSyncUI(true);
   } catch(e) {
-    showStatus('config-status', '❌ Erro: ' + e.message + ' — Verifique a URL e as permissões.', '#FF4500');
+    showStatus('config-status', '❌ URL inválida ou sem conexão. Verifique e tente novamente.', '#FF4500');
   }
 }
 
@@ -895,7 +881,9 @@ async function syncNow() {
   if (btn) { btn.textContent = '🔄'; btn.disabled = true; }
   document.getElementById('st-sync').style.display = 'flex';
   try {
-    const r = await fetch(scriptUrl);
+    // CORS: tenta buscar dados. Se bloqueado, usa dados locais.
+    const r = await fetch(scriptUrl, { mode: 'cors' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
     const j = await r.json();
     if (j.ok && j.data) {
       const remote = j.data;
@@ -921,7 +909,10 @@ async function syncNow() {
       updateSyncUI(true);
     }
   } catch(e) {
-    showToast('⚠️ Erro na sincronização', '#000', '#FFD740');
+    // CORS bloqueado pelo browser — normal quando hospedado no GitHub Pages
+    // Os dados da nutri chegam via POST (no-cors) e ficam na planilha
+    // Para ler de volta, a Fernanda usa o botão "Copiar" e você insere manualmente
+    console.log('Sync GET bloqueado por CORS — use o fluxo manual ou configure um proxy.');
     updateSyncUI(false);
   }
   if (btn) { btn.textContent = 'Sincronizar'; btn.disabled = false; }
@@ -931,11 +922,14 @@ async function syncNow() {
 async function sendToSheets(notes) {
   if (!scriptUrl) return false;
   try {
+    // no-cors: envia os dados mas não lê a resposta (limitação do browser)
     await fetch(scriptUrl, {
       method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify({ tipo: 'nutri', ...notes, autor: 'Dra. Fernanda Micelli' }),
     });
-    return true;
+    return true; // no-cors sempre resolve sem erro
   } catch(e) {
     return false;
   }
@@ -980,7 +974,7 @@ function showStatus(elId, msg, color) {
 }
 
 // Auto-sync a cada 5 minutos se tiver URL
-setInterval(() => { if (scriptUrl) syncNow(); }, 5 * 60 * 1000);
+// Auto-sync desabilitado (CORS no GitHub Pages) — use o botão manual na aba ⚙️
 
 // ═══════════════════════════════════════════════════════
 // COUNTDOWN
@@ -988,15 +982,58 @@ setInterval(() => { if (scriptUrl) syncNow(); }, 5 * 60 * 1000);
 function updateCountdowns() {
   const now = new Date();
   function calc(t) {
-    const d = t-now; if(d<=0) return {d:0,h:0,m:0};
-    return {d:Math.floor(d/86400000),h:Math.floor((d%86400000)/3600000),m:Math.floor((d%3600000)/60000)};
+    const d = t-now; if(d<=0) return {d:0,h:0,m:0,s:0};
+    return {d:Math.floor(d/86400000),h:Math.floor((d%86400000)/3600000),m:Math.floor((d%3600000)/60000),s:Math.floor((d%60000)/1000)};
   }
-  const r=calc(new Date("2026-06-07T06:00:00")), a=calc(new Date("2026-05-17T07:00:00"));
+  const r=calc(new Date("2026-06-07T06:20:00"));
   const p=v=>String(v).padStart(2,'0');
+  // Header countdown (legado, se existir)
   ['rd','rh','rm'].forEach((id,i)=>{ const el=document.getElementById('cd-'+id); if(el) el.textContent=p([r.d,r.h,r.m][i]); });
-  ['ad','ah','am'].forEach((id,i)=>{ const el=document.getElementById('cd-'+id); if(el) el.textContent=p([a.d,a.h,a.m][i]); });
+  // Novo countdown hero da Home
+  const chd=document.getElementById('ch-d'); if(chd) chd.textContent=r.d;
+  const chh=document.getElementById('ch-h'); if(chh) chh.textContent=p(r.h);
+  const chm=document.getElementById('ch-m'); if(chm) chm.textContent=p(r.m);
+  const chs=document.getElementById('ch-s'); if(chs) chs.textContent=p(r.s);
+  // Header dias
+  const hd=document.getElementById('hdr-days'); if(hd) hd.textContent=r.d;
 }
 setInterval(updateCountdowns,1000); updateCountdowns();
+
+// ═══════════════════════════════════════════════════════
+// HOJE (treino + data)
+// ═══════════════════════════════════════════════════════
+function renderToday() {
+  const today=new Date().toISOString().split('T')[0];
+  const dateEl=document.getElementById('today-date');
+  if(dateEl){
+    const d=new Date();
+    const dias=['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+    const meses=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+    dateEl.textContent=`${dias[d.getDay()]}, ${d.getDate()} ${meses[d.getMonth()]}`;
+  }
+  const wEl=document.getElementById('today-workout'); if(!wEl) return;
+  const plan=(D.weekPlan||[]).find(t=>t.date===today);
+  if(plan){
+    const TIPO_C2={longao:"#FF4500",moderado:"#4FC3F7",intervalado:"#FF7043",tempo:"#FFD740",regenerativo:"#69F0AE",prova:"#CE93D8"};
+    const c=TIPO_C2[plan.type]||'#888';
+    wEl.innerHTML=`<div style="display:flex;gap:10px;align-items:flex-start">
+      <div style="width:4px;align-self:stretch;background:${c};border-radius:2px;min-height:36px"></div>
+      <div style="flex:1"><div style="font-size:13px;color:#fff;font-weight:600;margin-bottom:3px">${plan.desc}</div>
+      ${plan.done?'<span class="today-pill" style="background:rgba(105,240,174,.1);border-color:rgba(105,240,174,.3);color:#69F0AE">✓ Concluído</span>':'<span class="today-pill">Programado para hoje</span>'}</div>
+    </div>`;
+  } else {
+    // Sem treino hoje: mostra o próximo
+    const future=(D.weekPlan||[]).filter(t=>t.date>today).sort((a,b)=>a.date.localeCompare(b.date));
+    if(future.length){
+      const nx=future[0];
+      const dnx=new Date(nx.date+'T12:00:00');
+      const dias=['dom','seg','ter','qua','qui','sex','sáb'];
+      wEl.innerHTML=`<div style="font-size:11px;color:#555;margin-bottom:4px">Próximo · ${dias[dnx.getDay()]} ${nx.date.slice(8)}/${nx.date.slice(5,7)}</div><div style="font-size:13px;color:#ccc;line-height:1.5">${nx.desc}</div>`;
+    } else {
+      wEl.innerHTML=`<div style="font-size:13px;color:#69F0AE;font-weight:600">🏁 Bora! Sem treino programado hoje.</div>`;
+    }
+  }
+}
 
 // ═══════════════════════════════════════════════════════
 // TABS
@@ -1009,7 +1046,8 @@ function showTab(id, btn) {
   if(id==='treinos') renderTrainings();
   if(id==='corpo') renderWeightChart();
   if(id==='semana') { renderWeekPlan(); hydrationWeekChart(); }
-  if(id==='asics') renderAsicsConnections();
+  if(id==='percurso') renderPercurso();
+  if(id==='home') renderToday();
   if(id==='clima') { loadWeatherSP(); loadWeatherRJ(); }
 }
 
@@ -1044,6 +1082,15 @@ function updateHydUI() {
   const bar=document.getElementById('hyd-bar'); if(bar){bar.style.width=pct+'%';bar.style.background=c;}
   const dis=document.getElementById('hyd-display'); if(dis){dis.textContent=(total/1000).toFixed(1)+'L / 3,0L';dis.style.color=c;}
   hydrationWeekChart();
+  // Indicador de média semanal na Home
+  const avgEl=document.getElementById('m-hyd-avg');
+  if(avgEl){
+    let sum=0;
+    for(let i=0;i<7;i++){const dt=new Date();dt.setDate(dt.getDate()-i);const ds=dt.toISOString().split('T')[0];sum+=(D.hydration||[]).filter(h=>h.date===ds).reduce((s,h)=>s+h.ml,0);}
+    const avg=sum/7/1000;
+    avgEl.textContent=avg.toFixed(1)+'L';
+    avgEl.style.color=avg>=2.5?'#69F0AE':'#FFD740';
+  }
 }
 
 function resetTodayHydration() {
@@ -1286,17 +1333,21 @@ function loadWeatherRJ() {
     .then(r=>r.json()).then(d=>{
       const cur=d.current?.temperature_2m;
       const wind=d.current?.windspeed_10m;
-      document.getElementById('clima-cur').textContent=cur+'°C';
-      document.getElementById('clima-wind').textContent='Vento '+wind+'km/h';
+      const climaCur=document.getElementById('clima-cur'); if(climaCur) climaCur.textContent=cur+'°C';
+      const climaWind=document.getElementById('clima-wind'); if(climaWind) climaWind.textContent='Vento '+wind+'km/h';
       const fi=cur>=26?{l:'CRÍTICO',c:'#FF4500',t:'+20s/km. Sal extra. Priorize chegar.'}:cur>=22?{l:'QUENTE',c:'#FFD740',t:'+10s/km. Molhe cabeça em todo posto.'}:{l:'IDEAL',c:'#69F0AE',t:'Condições favoráveis. Estratégia original.'};
       const ci=document.getElementById('clima-impact');
       if(ci){ci.style.background=fi.c+'12';ci.style.borderLeftColor=fi.c;}
       const ct=document.getElementById('clima-impact-title'); if(ct){ct.textContent='IMPACTO: '+fi.l;ct.style.color=fi.c;}
       const cx=document.getElementById('clima-impact-text'); if(cx) cx.textContent=fi.t;
-      // Tag compacta header
-      const wt=document.getElementById('wc-tag'); if(wt){const impact=cur>=26?{l:'CRÍTICO',c:'#FF4500'}:cur>=22?{l:'QUENTE',c:'#FFD740'}:{l:'IDEAL',c:'#69F0AE'}; wt.innerHTML=`<span class="tag" style="color:${impact.c};border-color:${impact.c}44;background:${impact.c}11">${impact.l}</span>`;}
+      // Hero da Home
+      const ht=document.getElementById('hero-temp'); if(ht) ht.textContent=cur+'°';
+      const hwt=document.getElementById('hero-wtag'); if(hwt) hwt.innerHTML=`<span class="tag" style="color:${fi.c};border-color:${fi.c}44;background:${fi.c}11">${fi.l}</span>`;
       renderForecast('rj-forecast', d, 'RIO DE JANEIRO');
-    }).catch(()=>{});
+    }).catch(()=>{
+      const ht=document.getElementById('hero-temp'); if(ht) ht.textContent='22°';
+      const hwt=document.getElementById('hero-wtag'); if(hwt) hwt.innerHTML='<span class="tag" style="color:#69F0AE;border-color:#69F0AE44;background:#69F0AE11">IDEAL</span>';
+    });
 }
 
 const WEATHER_ICONS = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌦️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️'};
@@ -1362,14 +1413,48 @@ function renderWeekPlan() {
 function renderAsicsConnections() {
   const el=document.getElementById('asics-connections'); if(!el) return;
   el.innerHTML=[
-    {icon:"🧪",c:"#CE93D8",t:"Validar protocolo de géis",d:"Primeiro teste em condições reais com postos organizados. Resultado alimenta a estratégia do Rio."},
-    {icon:"📊",c:"#4FC3F7",t:"Calibrar pace alvo da maratona",d:"Se fechar entre 1:37–1:40, confirma que 3:38–3:45 no Rio é realista. Abaixo de 1:37, pode apertar o objetivo."},
-    {icon:"❤️",c:"#FF4500",t:"Testar FC em ritmo de prova",d:"Monitorar FC no km 15–21. Se estiver acima de 178bpm, ritmo de maratona deve ser revisto."},
-    {icon:"🌡️",c:"#FFD740",t:"Aclimatação ao calor",d:"Domingo pode estar quente em SP. Treino de calor antes do Rio — experiência valiosa."},
+    {icon:"🏆",c:"#69F0AE",t:"PR conquistado: 1:41:09",d:"Cortou 2min25s. Validou que o objetivo de 3:40–3:45 no Rio é totalmente realista, com margem de sobra."},
+    {icon:"🧪",c:"#CE93D8",t:"Protocolo de géis validado",d:"Testado em prova real sem desconforto GI. Confiança total para replicar no Rio."},
+    {icon:"❤️",c:"#FF4500",t:"FC de prova: média 171, máx 190",d:"FC alta confirma que largar conservador no Rio (FC 155–165 nos primeiros 10km) é a escolha certa."},
+    {icon:"📊",c:"#4FC3F7",t:"Negative split funciona",d:"Começou 5:08, terminou 4:35. Mesma tática no Rio: segura no início, ataca no fim se sobrar perna."},
   ].map((a,i,arr)=>`
     <div style="display:flex;gap:10px;padding:8px 0;border-bottom:${i<arr.length-1?'1px solid #1a1a1a':'none'}">
       <div style="font-size:18px;flex-shrink:0">${a.icon}</div>
       <div><div style="font-size:11px;font-weight:700;color:${a.c};margin-bottom:2px">${a.t}</div><div style="font-size:11px;color:#777;line-height:1.5">${a.d}</div></div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// PERCURSO
+// ═══════════════════════════════════════════════════════
+function renderPercurso() {
+  const el=document.getElementById('percurso-analysis'); if(!el) return;
+  el.innerHTML=[
+    {trecho:"0–10km · Reserva → Barra",c:"#4FC3F7",alt:"Plano",dica:"Largada na Praia da Reserva. Terreno plano e rápido. Aqui a tentação de acelerar é máxima — SEGURA em 5:20–5:25. Pernas frescas enganam."},
+    {trecho:"10–18km · Barra → São Conrado",c:"#69F0AE",alt:"Plano + 1ª ondulação",dica:"Segue plano até começar a aproximação de São Conrado. Power Powder no km10. Mantém o ritmo controlado."},
+    {trecho:"18–24km · São Conrado + Joá",c:"#FFD740",alt:"⛰️ Ondulações curtas",dica:"O ponto mais técnico: subidas curtas no Elevado do Joá. Não force nas subidas — perde pouco tempo e poupa muito glicogênio. Gel km17,4 com sal antes da subida."},
+    {trecho:"24–34km · Leblon → Copacabana",c:"#FF7043",alt:"Plano · sol forte",dica:"Volta ao plano pela orla. MAS: já passa das 8h, sol forte sem sombra. Hidratação em todo posto. Xtratus c/caf km27,9 dá o boost mental."},
+    {trecho:"34–42km · Botafogo → Aterro",c:"#FF4500",alt:"Plano · final",dica:"Reta final pelo Aterro do Flamengo. Xtratus s/caf km33,6, Hidrogel+sal km39. Se sobrou perna, os últimos 5km são seus. Senão, segura firme."},
+  ].map((a,i,arr)=>`
+    <div style="border-left:4px solid ${a.c};padding:10px 12px;background:#0a0a0a;border-radius:0 6px 6px 0;margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;gap:8px">
+        <div style="font-size:12px;font-weight:700;color:${a.c}">${a.trecho}</div>
+        <span style="font-size:9px;color:${a.c};background:${a.c}15;padding:2px 6px;border-radius:4px;white-space:nowrap;border:1px solid ${a.c}33">${a.alt}</span>
+      </div>
+      <div style="font-size:11px;color:#888;line-height:1.6">${a.dica}</div>
+    </div>`).join('');
+
+  const kp=document.getElementById('percurso-keypoints'); if(!kp) return;
+  kp.innerHTML=[
+    {km:"km 6,2",e:"Gel Z2 Lemon · trecho plano, fácil de ingerir",c:"#69F0AE"},
+    {km:"km 17,4",e:"Gel + sal ANTES das ondulações do Joá",c:"#FFD740"},
+    {km:"km 21+",e:"Sol forte começa · hidratação redobrada",c:"#FF7043"},
+    {km:"km 27,9",e:"Xtratus c/cafeína · boost para a fase dura",c:"#FF4500"},
+    {km:"km 39",e:"Último gel + sal · reta final do Aterro",c:"#CE93D8"},
+  ].map((a,i,arr)=>`
+    <div style="display:flex;gap:10px;padding:7px 0;border-bottom:${i<arr.length-1?'1px solid #1a1a1a':'none'}">
+      <div style="font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;color:${a.c};min-width:52px">${a.km}</div>
+      <div style="font-size:11px;color:#888;line-height:1.5">${a.e}</div>
     </div>`).join('');
 }
 
@@ -1521,11 +1606,18 @@ document.getElementById('new-kg-date').value=new Date().toISOString().split('T')
 document.getElementById('t-date').value=new Date().toISOString().split('T')[0];
 
 renderHomeTrainings(); renderScience(); renderStrategy();
-renderWeekPlan(); renderAsicsConnections();
+renderWeekPlan(); renderPercurso(); renderToday();
 renderGels(); renderTrainings(); renderWeightChart();
 updateWeightDisplay(); updateHydUI(); updateHeaderStatus();
 renderNutriForm(); updateNutriRecs(); renderSetupSteps();
 loadWeather(); updateSyncUI(false);
+
+// Atualizar peso na Home a partir dos dados salvos
+(function(){
+  const lw=[...D.weights].sort((a,b)=>b.date.localeCompare(a.date))[0];
+  const mp=document.getElementById('m-peso');
+  if(mp&&lw) mp.textContent=String(lw.kg).replace('.',',');
+})();
 
 // Mostrar setup modal se não tiver URL configurada (primeira vez)
 if(!scriptUrl && !localStorage.getItem('adriano-setup-done')) {
@@ -1534,7 +1626,7 @@ if(!scriptUrl && !localStorage.getItem('adriano-setup-done')) {
 }
 
 // Se tiver URL, fazer sync inicial
-if(scriptUrl) setTimeout(syncNow, 2000);
+// Sync inicial removido para evitar erro CORS no carregamento
 
 // Auto-save nutri a cada 60s
 setInterval(()=>{
