@@ -269,6 +269,7 @@ input[type=range]{width:100%;accent-color:var(--orange);margin-bottom:10px}
   <div class="tabs">
     <button class="tab-btn active" onclick="showTab('home',this)">🏠 Home</button>
     <button class="tab-btn" onclick="showTab('semana',this)">📅 Semana</button>
+    <button class="tab-btn" onclick="showTab('kit',this)">🎽 Kit</button>
     <button class="tab-btn" onclick="showTab('estrategia',this)">🧠 Estratégia</button>
     <button class="tab-btn" onclick="showTab('geis',this)">💊 Géis</button>
     <button class="tab-btn" onclick="showTab('corpo',this)">⚖️ Corpo</button>
@@ -594,6 +595,89 @@ input[type=range]{width:100%;accent-color:var(--orange);margin-bottom:10px}
     <div class="alert" style="background:#1a0800;border-left:4px solid #FFD740;margin-top:4px">
       <div style="font-size:10px;color:#FFD740;font-weight:700;margin-bottom:4px">☀️ ATENÇÃO · LARGADA 6h20</div>
       <div style="font-size:11px;color:#bbb;line-height:1.6">Com largada às 6h20, você chega na Zona Sul (km 21+) já entre 8h–9h, com sol forte na orla de Ipanema/Copacabana — trechos sem sombra. A hidratação a partir do km 17 é decisiva.</div>
+    </div>
+  </div>
+
+  <!-- KIT -->
+  <div id="panel-kit" class="panel">
+    <div style="background:linear-gradient(135deg,#160400,#0a0a0a);border:1px solid rgba(255,69,0,.25);border-radius:14px;padding:16px;margin-bottom:14px">
+      <div style="font-size:9px;color:#FF6B3D;letter-spacing:.15em;margin-bottom:6px">🎽 INSCRIÇÃO · MARATONA DO RIO 2026</div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-end">
+        <div>
+          <div style="font-size:10px;color:#888">Número de peito</div>
+          <div style="font-family:'Oswald',sans-serif;font-size:44px;font-weight:900;color:#FF4500;line-height:.9">12114</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:10px;color:#888">Setor de largada</div>
+          <div style="font-family:'Oswald',sans-serif;font-size:24px;font-weight:900;color:#CE93D8">LILÁS H</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Retirada do kit - destaque -->
+    <div class="card" style="border:2px solid rgba(105,240,174,.4);background:#001208">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <div style="font-size:18px">📍</div>
+        <div style="font-size:14px;font-weight:700;color:#69F0AE">RETIRADA DO KIT</div>
+      </div>
+      <div style="background:#0a1a0e;border-radius:10px;padding:12px;margin-bottom:10px">
+        <div style="font-size:9px;color:#3a6a4a;letter-spacing:.1em;margin-bottom:3px">AGENDAMENTO CONFIRMADO</div>
+        <div style="font-family:'Oswald',sans-serif;font-size:20px;font-weight:700;color:#69F0AE">05/06 · Sexta</div>
+        <div style="font-size:13px;color:#aaa;margin-top:2px">das 10h00 às 14h00</div>
+      </div>
+      <div style="font-size:11px;color:#FFD740;line-height:1.6">⚠️ Leve documento com foto e este agendamento. Sem retirada no dia da prova.</div>
+    </div>
+
+    <!-- QR Code -->
+    <div class="card" style="text-align:center">
+      <div class="seclabel">QR CODE DE RETIRADA</div>
+      <div style="font-size:12px;color:#888;line-height:1.6;margin-bottom:12px">Apresente o QR Code do atleta para retirar o kit. Acesse pelo site/app da Maratona ou pelo print salvo no seu celular.</div>
+      <button onclick="alert('Abra o print do QR Code salvo na galeria do seu celular, ou acesse a área do atleta no site da Maratona do Rio.')" class="btn btn-outline btn-full">📱 Onde está meu QR Code?</button>
+    </div>
+
+    <!-- Dados do atleta -->
+    <div class="card">
+      <div class="seclabel">DADOS DO ATLETA</div>
+      <div style="display:grid;gap:10px">
+        <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #1a1a1a">
+          <span style="font-size:12px;color:#777">Nome</span>
+          <span style="font-size:13px;color:#fff;font-weight:600">Adriano Pereira da Costa</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #1a1a1a">
+          <span style="font-size:12px;color:#777">Modalidade</span>
+          <span style="font-size:13px;color:#FF4500;font-weight:700">42K · Maratona</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #1a1a1a">
+          <span style="font-size:12px;color:#777">Gênero</span>
+          <span style="font-size:13px;color:#fff;font-weight:600">Masculino</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #1a1a1a">
+          <span style="font-size:12px;color:#777">Setor</span>
+          <span style="font-size:13px;color:#CE93D8;font-weight:700">Lilás H</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:8px 0">
+          <span style="font-size:12px;color:#777">CPF</span>
+          <span style="font-size:13px;color:#fff;font-weight:600">310.494.878-00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Itens do kit -->
+    <div class="card">
+      <div class="seclabel">ITENS DO KIT</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:10px;background:#0e0e0e;border-radius:8px;padding:10px 12px"><span style="font-size:16px">🎟️</span><span style="font-size:13px;color:#ccc">Área VIP · 07/06</span></div>
+        <div style="display:flex;align-items:center;gap:10px;background:#0e0e0e;border-radius:8px;padding:10px 12px"><span style="font-size:16px">👕</span><span style="font-size:13px;color:#ccc">Camisa 42K · G · Masculino</span></div>
+        <div style="display:flex;align-items:center;gap:10px;background:#0e0e0e;border-radius:8px;padding:10px 12px"><span style="font-size:16px">🧦</span><span style="font-size:13px;color:#ccc">Meia · 39–43</span></div>
+        <div style="display:flex;align-items:center;gap:10px;background:#0e0e0e;border-radius:8px;padding:10px 12px"><span style="font-size:16px">🔢</span><span style="font-size:13px;color:#ccc">Número de peito · 12114</span></div>
+        <div style="display:flex;align-items:center;gap:10px;background:#0e0e0e;border-radius:8px;padding:10px 12px"><span style="font-size:16px">➕</span><span style="font-size:13px;color:#ccc">Itens extras</span></div>
+      </div>
+    </div>
+
+    <!-- Checklist véspera -->
+    <div class="card" style="border-color:rgba(255,215,64,.2)">
+      <div class="seclabel" style="color:#FFD740">✓ CHECKLIST DA VÉSPERA</div>
+      <div id="kit-checklist"></div>
     </div>
   </div>
 
@@ -1233,6 +1317,39 @@ function updateDepartCountdown() {
 }
 
 // ═══════════════════════════════════════════════════════
+// CHECKLIST DO KIT (véspera)
+// ═══════════════════════════════════════════════════════
+const KIT_ITEMS = [
+  "Número de peito 12114 preso à camisa",
+  "Chip de cronometragem (se separado)",
+  "Tênis de prova + meias",
+  "Roupa de corrida separada",
+  "Géis etiquetados por km (6,2/10/17,4/23,6/27,9/33,6/39)",
+  "Cápsulas de sal + extras",
+  "Relógio Garmin carregado + PacePro configurado",
+  "Vaselina / anti-atrito",
+  "Boné / viseira (sol da orla)",
+  "Café da manhã pré-prova comprado",
+];
+
+function renderKitChecklist() {
+  const el=document.getElementById('kit-checklist'); if(!el) return;
+  const checked=JSON.parse(localStorage.getItem('adriano-kit-check')||'{}');
+  el.innerHTML=KIT_ITEMS.map((item,i)=>`
+    <label style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:${i<KIT_ITEMS.length-1?'1px solid #1a1a1a':'none'};cursor:pointer">
+      <input type="checkbox" ${checked[i]?'checked':''} onchange="toggleKitItem(${i})" style="width:18px;height:18px;accent-color:#69F0AE;flex-shrink:0">
+      <span style="font-size:12px;color:${checked[i]?'#555':'#ccc'};text-decoration:${checked[i]?'line-through':'none'};line-height:1.4">${item}</span>
+    </label>`).join('');
+}
+
+function toggleKitItem(i) {
+  const checked=JSON.parse(localStorage.getItem('adriano-kit-check')||'{}');
+  checked[i]=!checked[i];
+  localStorage.setItem('adriano-kit-check', JSON.stringify(checked));
+  renderKitChecklist();
+}
+
+// ═══════════════════════════════════════════════════════
 // HOJE (treino + data)
 // ═══════════════════════════════════════════════════════
 function renderToday() {
@@ -1280,6 +1397,7 @@ function showTab(id, btn) {
   if(id==='corpo') renderWeightChart();
   if(id==='semana') { renderWeekPlan(); hydrationWeekChart(); }
   if(id==='percurso') renderPercurso();
+  if(id==='kit') renderKitChecklist();
   if(id==='home') renderToday();
   if(id==='clima') { loadWeatherSP(); loadWeatherRJ(); }
 }
@@ -1843,7 +1961,7 @@ document.getElementById('t-date').value=new Date().toISOString().split('T')[0];
 
 renderHomeTrainings(); renderScience(); renderStrategy();
 renderWeekPlan(); renderPercurso(); renderToday();
-renderCourseStrip(); updateDepartCountdown(); renderMorningTimeline();
+renderCourseStrip(); updateDepartCountdown(); renderMorningTimeline(); renderKitChecklist();
 renderGels(); renderTrainings(); renderWeightChart();
 updateWeightDisplay(); updateHydUI(); updateHeaderStatus();
 renderNutriForm(); updateNutriRecs(); renderSetupSteps();
