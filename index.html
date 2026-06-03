@@ -185,14 +185,20 @@ input[type=range]{width:100%;accent-color:var(--orange);margin-bottom:10px}
 .logi-btn:active{transform:scale(.97)}
 .course-card{background:#101010;border:1px solid #1f1f1f;border-radius:16px;padding:16px;margin-bottom:12px}
 .course-strip{position:relative}
-.cs-track{position:relative;height:10px;border-radius:5px;display:flex;overflow:hidden;margin:0 0 6px}
+.cs-paces{position:relative;height:38px;margin-bottom:4px}
+.cs-pace{position:absolute;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center}
+.cs-pace-val{font-family:'Oswald',sans-serif;font-size:15px;font-weight:700;line-height:1}
+.cs-pace-km{font-size:8px;color:#555;margin-top:1px}
+.cs-track{position:relative;height:14px;border-radius:7px;display:flex;overflow:hidden;margin:0 0 6px}
 .cs-seg{height:100%}
-.cs-gels{position:relative;height:46px;margin-top:2px}
-.cs-gel{position:absolute;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:2px}
-.cs-gel-dot{width:11px;height:11px;border-radius:50%;border:2px solid #0a0a0a}
-.cs-gel-km{font-size:7px;color:#888;white-space:nowrap;font-family:'Oswald',sans-serif;font-weight:600}
+.cs-legend{font-size:9px;color:#555;letter-spacing:.1em;margin:14px 0 4px;font-weight:600}
+.cs-gels{position:relative;height:64px;margin-top:2px}
+.cs-gel{position:absolute;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:3px}
+.cs-gel-dot{width:15px;height:15px;border-radius:50%;border:2px solid #0a0a0a;box-shadow:0 0 0 1px rgba(255,255,255,.08)}
+.cs-gel-km{font-size:11px;white-space:nowrap;font-family:'Oswald',sans-serif;font-weight:700}
+.cs-gel-name{font-size:9px;color:#888;white-space:nowrap}
 .cs-marks{display:flex;justify-content:space-between;margin-top:2px}
-.cs-mark{font-size:7px;color:#444}
+.cs-mark{font-size:8px;color:#444}
 .spinner{display:inline-block;width:12px;height:12px;border:2px solid #333;border-top-color:var(--green);border-radius:50%;animation:spin .8s linear infinite}
 </style>
 </head>
@@ -1207,48 +1213,58 @@ function renderCourseStrip() {
   const TOTAL=42.2;
   // Trechos por pace (largura proporcional à distância)
   const segs=[
-    {ate:10,c:"#4FC3F7",pace:"5:20–5:25"},
-    {ate:18,c:"#69F0AE",pace:"5:15–5:20"},
-    {ate:24,c:"#FFD740",pace:"5:18–5:25"},
-    {ate:34,c:"#FF7043",pace:"5:12–5:18"},
-    {ate:42.2,c:"#FF4500",pace:"5:00–5:18"},
+    {de:0,ate:10,c:"#4FC3F7",pace:"5:20"},
+    {de:10,ate:18,c:"#69F0AE",pace:"5:17"},
+    {de:18,ate:24,c:"#FFD740",pace:"5:21"},
+    {de:24,ate:34,c:"#FF7043",pace:"5:15"},
+    {de:34,ate:42.2,c:"#FF4500",pace:"5:08"},
   ];
-  let prev=0;
-  const track=segs.map(s=>{const w=((s.ate-prev)/TOTAL*100);prev=s.ate;return `<div class="cs-seg" style="width:${w}%;background:${s.c}"></div>`;}).join('');
+  const track=segs.map(s=>{const w=((s.ate-s.de)/TOTAL*100);return `<div class="cs-seg" style="width:${w}%;background:${s.c}"></div>`;}).join('');
+
+  // Pace flutuante sobre cada zona (centralizado na zona)
+  const paceEls=segs.map(s=>{
+    const center=((s.de+s.ate)/2/TOTAL*100);
+    const w=((s.ate-s.de)/TOTAL*100);
+    return `<div class="cs-pace" style="left:${center}%;width:${w}%">
+      <div class="cs-pace-val" style="color:${s.c}">${s.pace}</div>
+      <div class="cs-pace-km">${s.de}–${s.ate>42?42:s.ate}</div>
+    </div>`;
+  }).join('');
 
   // Géis (posição = km / total)
   const gels=[
     {km:6.2,nome:"Lemon",c:"#69F0AE"},
     {km:10,nome:"Powder",c:"#4FC3F7"},
-    {km:17.4,nome:"Espresso+sal",c:"#FF7043"},
+    {km:17.4,nome:"Espresso·sal",c:"#FF7043"},
     {km:23.6,nome:"Tropical",c:"#69F0AE"},
     {km:27.9,nome:"Xtratus☕",c:"#FF4500"},
     {km:33.6,nome:"Xtratus",c:"#FFD740"},
-    {km:39,nome:"Hidro+sal",c:"#CE93D8"},
+    {km:39,nome:"Hidro·sal",c:"#CE93D8"},
   ];
   const gelEls=gels.map((g,i)=>{
     const pos=(g.km/TOTAL*100);
-    // Alterna altura do label para não sobrepor
-    const top=i%2===0?'0':'22px';
+    const top=i%2===0?'0':'34px';
     return `<div class="cs-gel" style="left:${pos}%;top:${top}">
       <div class="cs-gel-dot" style="background:${g.c}"></div>
       <div class="cs-gel-km" style="color:${g.c}">${g.km}</div>
-      <div style="font-size:7px;color:#666;white-space:nowrap">${g.nome}</div>
+      <div class="cs-gel-name">${g.nome}</div>
     </div>`;
   }).join('');
 
   const ca=climateAdjust(RIO_TEMP);
   el.innerHTML=`
+    <div class="cs-paces">${paceEls}</div>
     <div class="cs-track">${track}</div>
     <div class="cs-marks">
       <span class="cs-mark">0km · Reserva</span>
       <span class="cs-mark" style="color:#FFD740">21 · meia</span>
       <span class="cs-mark">42 · Aterro</span>
     </div>
+    <div class="cs-legend">💊 GÉIS</div>
     <div class="cs-gels">${gelEls}</div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;padding-top:10px;border-top:1px solid #1a1a1a">
-      <div style="font-size:9px;color:#FFD740">⛰️ Joá km18–24: poupa nas subidas</div>
-      <div style="font-size:9px;color:#FF7043">☀️ km24+: sol forte, hidrata</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;padding-top:10px;border-top:1px solid #1a1a1a">
+      <div style="font-size:10px;color:#FFD740">⛰️ Joá km18–24: poupa nas subidas</div>
+      <div style="font-size:10px;color:#FF7043">☀️ km24+: sol forte, hidrata</div>
     </div>
     <div style="margin-top:10px;padding:10px 12px;background:${ca.c}11;border:1px solid ${ca.c}33;border-radius:10px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
